@@ -228,6 +228,14 @@
   .tabela td.itemdesc{color:#5E5A56;font-size:8pt;padding-top:0;padding-bottom:3mm;
                       border-bottom:1px solid var(--linha)}
 
+
+  /* o seu projeto */
+  .briefing{max-width:none;width:56%;display:flex;flex-direction:column;gap:3mm}
+  .briefing p{font-size:11pt;line-height:1.75;margin:0;max-width:52ch}
+  .briefing p:first-child{font-size:13pt;line-height:1.6;color:#2A2622}
+  .briefimg{position:absolute;right:0;top:0;bottom:0;width:38%;
+            background-size:cover;background-position:center}
+
   /* ---------------- impressão ---------------- */
   @page{size:338mm 190mm;margin:0}
   @media print{
@@ -287,6 +295,22 @@
         </div>
       </div>
       <p class="nota">O porte define os prazos das três etapas. Dá para ajustar depois.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>O seu projeto</legend>
+      <div>
+        <label for="briefing">Abertura — o que você entendeu do projeto dele</label>
+        <textarea id="briefing" rows="6" placeholder="Vocês procuram um apartamento que receba bem: cozinha integrada ao living, uma mesa que caiba a família inteira e um home office que suma quando não estiver em uso.
+
+O desafio é ganhar espaço sem obra pesada — a solução passa por marcenaria sob medida e uma paginação de piso que alongue a área social."></textarea>
+      </div>
+      <div>
+        <label for="briefFoto">Imagem desta página</label>
+        <select id="briefFoto"></select>
+      </div>
+      <p class="nota">Esta é a página que mais vende: mostra que você ouviu antes
+        de falar de preço. Deixe em branco para não incluí-la.</p>
     </fieldset>
 
     <fieldset>
@@ -587,6 +611,10 @@
       FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("") +
       '<option value="">Sem foto</option>';
     $("investFoto").value = FOTOS[4] ? FOTOS[4][0] : FOTOS[0][0];
+    $("briefFoto").innerHTML =
+      FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("") +
+      '<option value="">Sem imagem</option>';
+    $("briefFoto").value = FOTOS[3] ? FOTOS[3][0] : FOTOS[0][0];
     $("portfolio").innerHTML = FOTOS.map(function(f,i){
       return '<label class="chk"><input type="checkbox" data-pf="'+f[0]+'"'+
              (i<3?" checked":"")+'><span>'+esc(f[1])+'</span></label>';
@@ -617,6 +645,8 @@
     d.data = $("dataProp").value.trim() || hoje();
     d.capaFoto = $("capaFoto").value;
     d.investFoto = $("investFoto").value;
+    d.briefing = $("briefing").value.trim();
+    d.briefFoto = $("briefFoto").value;
     d.portfolio = FOTOS.filter(function(f){
       var c = document.querySelector('[data-pf="'+f[0]+'"]');
       return c && c.checked; }).slice(0,6);
@@ -694,16 +724,17 @@
       '<span class="data">'+esc(d.data)+'</span></div>'+
       '</div>'+trilho()+'</section>');
 
-    /* minha história */
-    paginas.push('<section class="pag historia"><div class="corpo">'+
-      '<div class="retrato" style="background-image:url(img/junia.jpg)"></div>'+
-      '<div class="rubrica">Junia Vaz</div>'+
-      '<div class="col">'+
-        '<div class="faixa"><span>Minha História</span></div>'+
-        '<div class="legenda">Um pouco da minha experiência</div>'+
-        '<div class="painel"><p>'+BIO+'</p><p>'+BIO2+'</p></div>'+
-      '</div>'+
-      '</div>'+trilho()+'</section>');
+    /* o seu projeto — abre pelo cliente, não pela arquiteta */
+    if(d.briefing){
+      paginas.push('<section class="pag"><div class="corpo">'+
+        '<h2 class="titulo">O seu projeto</h2>'+
+        '<div class="briefing">'+
+          d.briefing.split(/\n\s*\n/).map(function(par){
+            return '<p>'+esc(par.replace(/\n/g," "))+'</p>'; }).join("")+
+        '</div>'+
+        (d.briefFoto?'<div class="briefimg" style="background-image:url(img/'+d.briefFoto+')"></div>':'')+
+        '</div>'+trilho()+'</section>');
+    }
 
     /* etapas */
     paginas.push('<section class="pag comotrab"><div class="corpo">'+
@@ -722,17 +753,6 @@
       }).join("") +'</div>'+
       '</div>'+trilho()+'</section>');
 
-
-    /* portfolio */
-    if(d.portfolio.length){
-      paginas.push('<section class="pag"><div class="corpo">'+
-        '<h2 class="titulo">Projetos realizados</h2>'+
-        '<div class="galeria">'+ d.portfolio.map(function(f){
-          return '<figure><div class="img" style="background-image:url(img/'+f[0]+')"></div>'+
-                 '<figcaption>'+esc(f[1])+'</figcaption></figure>';
-        }).join("") +'</div>'+
-        '</div>'+trilho()+'</section>');
-    }
 
     /* programa + entregas */
     paginas.push('<section class="pag"><div class="corpo">'+
@@ -802,6 +822,28 @@
       '<div><b>Não está incluso</b>'+esc(d.naoInclui)+'</div>'+
       '</div></div>'+
       (d.investFoto?'<div class="ilustra" style="background-image:url(img/'+d.investFoto+')"></div>':'')+
+      '</div>'+
+      '</div>'+trilho()+'</section>');
+
+    /* portfolio */
+    if(d.portfolio.length){
+      paginas.push('<section class="pag"><div class="corpo">'+
+        '<h2 class="titulo">Projetos realizados</h2>'+
+        '<div class="galeria">'+ d.portfolio.map(function(f){
+          return '<figure><div class="img" style="background-image:url(img/'+f[0]+')"></div>'+
+                 '<figcaption>'+esc(f[1])+'</figcaption></figure>';
+        }).join("") +'</div>'+
+        '</div>'+trilho()+'</section>');
+    }
+
+    /* minha história */
+    paginas.push('<section class="pag historia"><div class="corpo">'+
+      '<div class="retrato" style="background-image:url(img/junia.jpg)"></div>'+
+      '<div class="rubrica">Junia Vaz</div>'+
+      '<div class="col">'+
+        '<div class="faixa"><span>Minha História</span></div>'+
+        '<div class="legenda">Um pouco da minha experiência</div>'+
+        '<div class="painel"><p>'+BIO+'</p><p>'+BIO2+'</p></div>'+
       '</div>'+
       '</div>'+trilho()+'</section>');
 
