@@ -207,6 +207,15 @@
   .historia .rubrica{position:absolute;right:6%;bottom:7mm;font-family:var(--caligrafia);
                      font-size:26pt;color:#FFF;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 
+
+  /* investimento com imagem lateral */
+  .pag.invest .corpo{padding-right:8mm}
+  .invest .colunas{display:grid;grid-template-columns:1fr 62mm;gap:9mm;flex:1;min-height:0}
+  .invest .esq{display:flex;flex-direction:column;min-height:0}
+  .invest .ilustra{background-size:cover;background-position:center;align-self:stretch}
+  .tabela td.itemdesc{color:#5E5A56;font-size:8pt;padding-top:0;padding-bottom:3mm;
+                      border-bottom:1px solid var(--linha)}
+
   /* ---------------- impressão ---------------- */
   @page{size:338mm 190mm;margin:0}
   @media print{
@@ -287,6 +296,10 @@
       <div>
         <label for="capaFoto">Foto da capa</label>
         <select id="capaFoto"></select>
+      </div>
+      <div>
+        <label for="investFoto">Foto na página de investimento</label>
+        <select id="investFoto"></select>
       </div>
       <div>
         <label>Portfólio — marque até 6 (desmarque tudo para não incluir a página)</label>
@@ -556,6 +569,10 @@
       FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("") +
       '<option value="">Sem foto (capa limpa)</option>';
     $("capaFoto").value = FOTOS[0][0];          // abre já com imagem
+    $("investFoto").innerHTML =
+      FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("") +
+      '<option value="">Sem foto</option>';
+    $("investFoto").value = FOTOS[4] ? FOTOS[4][0] : FOTOS[0][0];
     $("portfolio").innerHTML = FOTOS.map(function(f,i){
       return '<label class="chk"><input type="checkbox" data-pf="'+f[0]+'"'+
              (i<3?" checked":"")+'><span>'+esc(f[1])+'</span></label>';
@@ -585,6 +602,7 @@
     d.naoInclui = $("naoInclui").value.trim();
     d.data = $("dataProp").value.trim() || hoje();
     d.capaFoto = $("capaFoto").value;
+    d.investFoto = $("investFoto").value;
     d.portfolio = FOTOS.filter(function(f){
       var c = document.querySelector('[data-pf="'+f[0]+'"]');
       return c && c.checked; }).slice(0,6);
@@ -724,8 +742,14 @@
       var det = "";
       if(d.modo==="ambiente") det = d.ambientes.length+" ambientes";
       if(d.modo==="m2") det = (d.area||0)+" m²";
-      linhas += '<tr><td>'+esc(T.linha)+(det?' <span style="color:#8C857B">('+det+')</span>':'')+
-                '</td><td>'+moeda(d.base)+'</td></tr>';
+      linhas += '<tr><td>'+esc(T.linha)+'</td><td>'+moeda(d.base)+'</td></tr>';
+      var resumo = [];
+      if(d.ambientes.length) resumo.push(d.ambientes.length+" ambiente"+(d.ambientes.length===1?"":"s"));
+      if(d.entregas.length) resumo.push(d.entregas.length+" entregáveis");
+      if(det && d.modo!=="fechado") resumo.push(det);
+      resumo.push(d.visitas+" visita"+(d.visitas==1?"":"s")+" à obra");
+      resumo.push(d.revisoes+" rodada"+(d.revisoes==1?"":"s")+" de revisão");
+      linhas += '<tr><td class="itemdesc" colspan="2">'+esc(resumo.join(" · "))+'</td></tr>';
     }
     d.adicionais.forEach(function(a){
       linhas += '<tr><td>'+esc(a[1])+'</td><td>'+(a[2]?moeda(a[2]):"a combinar")+'</td></tr>'+
@@ -740,11 +764,15 @@
       'integralmente aos executores, com prestação de contas mensal. Esses valores '+
       'transitam pela conta do escritório mas não constituem receita.</div>' : '';
 
-    paginas.push('<section class="pag"><div class="corpo">'+
+    paginas.push('<section class="pag invest"><div class="corpo">'+
       '<h2 class="titulo">Investimento</h2>'+
+      '<div class="colunas"><div class="esq">'+
       '<table class="tabela"><thead><tr><th>Serviço</th><th>Valor</th></tr></thead>'+
       '<tbody>'+linhas+
-      '<tr class="total"><td>Total</td><td>'+moeda(d.total)+'</td></tr></tbody></table>'+
+      (d.adicionais.length
+        ? '<tr class="total"><td>Total</td><td>'+moeda(d.total)+'</td></tr>'
+        : '<tr class="total"><td>Investimento total</td><td>'+moeda(d.total)+'</td></tr>')+
+      '</tbody></table>'+
       repasse+
       '<div class="condicoes">'+
       '<div><b>Pagamento</b>'+esc(textoPagamento(d))+'</div>'+
@@ -753,6 +781,8 @@
       '<div><b>Revisões</b>Estão inclusas '+esc(d.revisoes)+' rodadas de alteração por etapa. '+
         'Revisões além disso são orçadas à parte.</div>'+
       '<div><b>Não está incluso</b>'+esc(d.naoInclui)+'</div>'+
+      '</div></div>'+
+      (d.investFoto?'<div class="ilustra" style="background-image:url(img/'+d.investFoto+')"></div>':'')+
       '</div>'+
       '</div>'+trilho()+'</section>');
 
