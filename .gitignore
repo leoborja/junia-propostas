@@ -4,3 +4,8 @@ exemplos/*.png
 exemplos/*.jpg
 # *.pdf — liberado só para img/ processado
 .DS_Store
+
+# backup das ilustrações de terceiros — não publicar
+img/originais-terceiros/
+img/novas/
+out/
