@@ -8,8 +8,8 @@
   :root{
     /* paleta extraída do material original da Junia (.pptx) */
     --osso:#F3F3F3; --taupe:#D9CCBF; --taupe-forte:#A88C68; --tinta:#0E0E0E;
-    --linha:#E3DCD4; --areia:#D9CCBF; --suave:#6E6A66; --display:#DED3CA;
-    --bronze:#BE9769;
+    --linha:#E3DCD4; --areia:#D9CCBF; --suave:#5E5A56; --display:#9C8055;
+    --bronze:#7D6039; --faixa:#8F7449;
     --ui-bg:#EBE7E1; --ui-card:#F7F5F2; --ui-txt:#3A3733; --ui-sub:#7C756C;
     --ui-linha:#DCD4C9; --ui-campo:#FFFFFF; --ui-acento:#8A7059;
     /* Poppins é a fonte real do material dela; Parisienne substitui a Brittany (comercial) */
@@ -103,7 +103,7 @@
   .trilho .meio{flex:1;display:flex;align-items:center;justify-content:center;gap:7mm;
                 writing-mode:vertical-rl}
   .trilho .vert{font-family:var(--geo);font-weight:300;font-size:13pt;letter-spacing:.34em;
-                text-transform:uppercase;color:var(--display)}
+                text-transform:uppercase;color:#9C8055}
   .trilho .vert.forte{color:var(--bronze)}
 
   h2.titulo{font-family:var(--geo);font-weight:300;font-size:24pt;letter-spacing:.13em;
@@ -118,14 +118,14 @@
   .capa .grande{font-family:var(--geo);font-weight:200;font-size:46pt;letter-spacing:.12em;
                 text-transform:uppercase;color:var(--display);margin:0;line-height:1}
   .capa .tipo{font-family:var(--geo);font-weight:300;font-size:9.5pt;letter-spacing:.26em;
-              text-transform:uppercase;color:var(--bronze);margin:3mm 0 0}
+              text-transform:uppercase;color:#6F5632;margin:3mm 0 0}
   .capa .quem{font-family:var(--caligrafia);font-size:30pt;color:var(--tinta);margin:7mm 0 0;
               line-height:1.25}
-  .capa .local{font-size:10pt;color:var(--suave);margin:3mm 0 0;letter-spacing:.03em}
+  .capa .local{font-size:10pt;color:#4A4540;margin:3mm 0 0;letter-spacing:.03em}
   .assinatura{display:flex;align-items:center;gap:9px}
   .assinatura .nome{font-family:var(--geo);font-weight:300;font-size:16pt;letter-spacing:.22em;
                     text-transform:uppercase;color:var(--bronze)}
-  .assinatura .data{font-size:9pt;color:var(--suave);margin-left:auto}
+  .assinatura .data{font-size:9pt;color:#5E5A56;margin-left:auto}
 
   /* etapas */
   .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:9mm;margin-top:2mm}
@@ -146,7 +146,7 @@
   .entregas{font-size:9pt;line-height:1.55}
   .entregas dt{font-weight:600;margin-top:3mm;color:var(--tinta)}
   .entregas dt:first-child{margin-top:0}
-  .entregas dd{margin:.6mm 0 0;color:#59544D}
+  .entregas dd{margin:.6mm 0 0;color:#463F38}
 
   /* investimento */
   .tabela{width:100%;border-collapse:collapse;margin-top:2mm;font-size:10pt}
@@ -158,10 +158,10 @@
              font-variant-numeric:tabular-nums}
   .tabela tr.total td{border-bottom:0;border-top:2px solid var(--taupe);font-weight:700;
                       font-size:12pt;padding-top:3.4mm}
-  .tabela td.desc{color:var(--suave);font-size:8.5pt;padding-top:0;border-bottom:0}
+  .tabela td.desc{color:#5E5A56;font-size:8.5pt;padding-top:0;border-bottom:0}
   .condicoes{margin-top:auto;padding-top:5mm;border-top:1px solid var(--linha);
              display:grid;grid-template-columns:1fr 1fr;gap:4mm 10mm;font-size:8.5pt;
-             line-height:1.6;color:#59544D}
+             line-height:1.6;color:#463F38}
   .condicoes b{display:block;font-family:var(--geo);font-size:8pt;letter-spacing:.13em;
                text-transform:uppercase;color:var(--bronze);font-weight:400;
                margin-bottom:.8mm}
@@ -185,8 +185,27 @@
   .galeria figure{margin:0;display:flex;flex-direction:column;min-height:0}
   .galeria .img{flex:1;background-size:cover;background-position:center;min-height:0}
   .galeria figcaption{font-family:var(--geo);font-weight:300;font-size:7.5pt;
-                      letter-spacing:.12em;text-transform:uppercase;color:var(--bronze);
+                      letter-spacing:.12em;text-transform:uppercase;color:#6F5632;
                       padding-top:2mm}
+
+
+  /* Minha História — reproduz a página original */
+  .historia .corpo{padding:0;inset:0 44mm 0 0;display:block;position:absolute}
+  .historia .col{position:absolute;left:14mm;top:11mm;bottom:11mm;width:44%;
+                 display:flex;flex-direction:column;gap:5mm}
+  .historia .faixa{background:var(--faixa);padding:6mm 8mm;text-align:center}
+  .historia .faixa span{font-family:var(--caligrafia);font-size:30pt;color:#FFF;
+                        line-height:1;display:block}
+  .historia .legenda{text-align:center;font-family:var(--geo);font-weight:500;
+                     font-size:10pt;color:var(--tinta)}
+  .historia .painel{background:var(--taupe);padding:8mm;flex:1;display:flex;
+                    flex-direction:column;justify-content:center;gap:4mm}
+  .historia .painel p{margin:0;font-size:9.5pt;line-height:1.75;color:#3B342C;
+                      text-align:justify;max-width:none}
+  .historia .retrato{position:absolute;right:0;top:0;bottom:0;width:48%;
+                     background-size:cover;background-position:center top}
+  .historia .rubrica{position:absolute;right:6%;bottom:7mm;font-family:var(--caligrafia);
+                     font-size:26pt;color:#FFF;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 
   /* ---------------- impressão ---------------- */
   @page{size:338mm 190mm;margin:0}
@@ -642,10 +661,20 @@
       '<span class="data">'+esc(d.data)+'</span></div>'+
       '</div>'+trilho()+'</section>');
 
+    /* minha história */
+    paginas.push('<section class="pag historia"><div class="corpo">'+
+      '<div class="retrato" style="background-image:url(img/junia.jpg)"></div>'+
+      '<div class="rubrica">Junia Vaz</div>'+
+      '<div class="col">'+
+        '<div class="faixa"><span>Minha História</span></div>'+
+        '<div class="legenda">Um pouco da minha experiência</div>'+
+        '<div class="painel"><p>'+BIO+'</p><p>'+BIO2+'</p></div>'+
+      '</div>'+
+      '</div>'+trilho()+'</section>');
+
     /* etapas */
     paginas.push('<section class="pag"><div class="corpo">'+
       '<h2 class="titulo">Como trabalhamos</h2>'+
-      '<p>'+BIO+'</p><p>'+BIO2+'</p>'+
       '<div class="etapas">'+ et.map(function(e,i){
         return '<div class="etapa"><h4>'+esc(e[0])+'</h4><ul>'+
           e[1].map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("")+
