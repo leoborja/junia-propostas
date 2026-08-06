@@ -38,10 +38,10 @@
   .app{display:grid;grid-template-columns:376px minmax(0,1fr);min-height:100vh}
   @media (max-width:1080px){ .app{grid-template-columns:1fr} }
 
-  .painel{background:var(--ui-card);border-right:1px solid var(--ui-linha);
+  #painel{background:var(--ui-card);border-right:1px solid var(--ui-linha);
           padding:26px 24px 60px;display:flex;flex-direction:column;gap:22px;
           max-height:100vh;overflow-y:auto;position:sticky;top:0}
-  @media (max-width:1080px){ .painel{position:static;max-height:none;border-right:0;
+  @media (max-width:1080px){ #painel{position:static;max-height:none;border-right:0;
           border-bottom:1px solid var(--ui-linha)} }
 
   .marca{display:flex;align-items:center;gap:11px;padding-bottom:18px;
@@ -136,7 +136,7 @@
   .etapa .tira{height:4mm;background:var(--taupe);flex:none}
   .etapa .num{font-family:"Cormorant Garamond",Georgia,serif;font-size:20pt;color:#9C8055;
               line-height:1;margin:2.5mm 0 2mm;font-weight:400}
-  .etapa .painel{background:#8A6A45;color:#FFF;padding:4mm 5mm;flex:1;display:flex;
+  .etapa .caixa{background:#8A6A45;color:#FFF;padding:4mm 5mm;flex:1;display:flex;
                  flex-direction:column;min-height:0}
   .etapa h4{font-family:var(--geo);font-weight:500;font-size:9.5pt;margin:0 0 2.5mm;color:#FFF}
   .etapa ul{margin:0;padding-left:4mm;font-size:8.5pt;line-height:1.55;color:#FFF}
@@ -210,9 +210,9 @@
                         line-height:1;display:block}
   .historia .legenda{text-align:center;font-family:var(--geo);font-weight:500;
                      font-size:10pt;color:var(--tinta)}
-  .historia .painel{background:var(--taupe);padding:8mm;flex:1;display:flex;
+  .historia .texto{background:var(--taupe);padding:8mm;flex:1;display:flex;
                     flex-direction:column;justify-content:center;gap:4mm}
-  .historia .painel p{margin:0;font-size:9.5pt;line-height:1.75;color:#3B342C;
+  .historia .texto p{margin:0;font-size:9.5pt;line-height:1.75;color:#3B342C;
                       text-align:justify;max-width:none}
   .historia .retrato{position:absolute;right:0;top:0;bottom:0;width:48%;
                      background-size:cover;background-position:center top}
@@ -239,7 +239,7 @@
   /* ---------------- impressão ---------------- */
   @page{size:338mm 190mm;margin:0}
   @media print{
-    .painel,.rotulo{display:none!important}
+    #painel,.rotulo{display:none!important}
     .app{display:block}
     .palco{padding:0;gap:0;display:block}
     .pag{box-shadow:none;break-after:page;page-break-after:always;margin:0}
@@ -745,7 +745,7 @@ O desafio é ganhar espaço sem obra pesada — a solução passa por marcenaria
           '<div class="ilus" style="background-image:url(img/'+ILUSTRA[i]+')"></div>'+
           '<div class="tira"></div>'+
           '<div class="num">0'+(i+1)+'.</div>'+
-          '<div class="painel"><h4>'+esc(e[0])+'</h4><ul>'+
+          '<div class="caixa"><h4>'+esc(e[0])+'</h4><ul>'+
           e[1].map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("")+
           '</ul><div class="prazo">Prazo — '+pr[i]+' dias'+
           (i===0?" após a assinatura":i===1?" após aprovação do layout":" após aprovação do 3D")+
@@ -843,7 +843,7 @@ O desafio é ganhar espaço sem obra pesada — a solução passa por marcenaria
       '<div class="col">'+
         '<div class="faixa"><span>Minha História</span></div>'+
         '<div class="legenda">Um pouco da minha experiência</div>'+
-        '<div class="painel"><p>'+BIO+'</p><p>'+BIO2+'</p></div>'+
+        '<div class="texto"><p>'+BIO+'</p><p>'+BIO2+'</p></div>'+
       '</div>'+
       '</div>'+trilho()+'</section>');
 
