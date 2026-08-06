@@ -1,0 +1,725 @@
+<meta charset="utf-8">
+<title>Gerador de Propostas — Junia Vaz Arquitetura</title>
+
+<style>
+  :root{
+    --osso:#F2EFEA; --taupe:#CBBBA9; --taupe-forte:#8A7059; --tinta:#3A3733;
+    --linha:#E0D8CE; --areia:#DCD2C6; --suave:#7C756C;
+    --ui-bg:#EBE7E1; --ui-card:#F7F5F2; --ui-txt:#3A3733; --ui-sub:#7C756C;
+    --ui-linha:#DCD4C9; --ui-campo:#FFFFFF; --ui-acento:#8A7059;
+    --geo:"Futura","Century Gothic","Avenir Next","Questrial","Trebuchet MS",sans-serif;
+    --corpo:"Avenir Next","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --caligrafia:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --ui-bg:#1C1A17; --ui-card:#262320; --ui-txt:#E9E3DA; --ui-sub:#A79C8E;
+           --ui-linha:#383430; --ui-campo:#151310; --ui-acento:#C9AE8E; }
+  }
+  :root[data-theme="dark"]{
+    --ui-bg:#1C1A17; --ui-card:#262320; --ui-txt:#E9E3DA; --ui-sub:#A79C8E;
+    --ui-linha:#383430; --ui-campo:#151310; --ui-acento:#C9AE8E;
+  }
+  :root[data-theme="light"]{
+    --ui-bg:#EBE7E1; --ui-card:#F7F5F2; --ui-txt:#3A3733; --ui-sub:#7C756C;
+    --ui-linha:#DCD4C9; --ui-campo:#FFFFFF; --ui-acento:#8A7059;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ui-bg);color:var(--ui-txt);font-family:var(--corpo);
+       font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+  /* ---------------- app ---------------- */
+  .app{display:grid;grid-template-columns:376px minmax(0,1fr);min-height:100vh}
+  @media (max-width:1080px){ .app{grid-template-columns:1fr} }
+
+  .painel{background:var(--ui-card);border-right:1px solid var(--ui-linha);
+          padding:26px 24px 60px;display:flex;flex-direction:column;gap:22px;
+          max-height:100vh;overflow-y:auto;position:sticky;top:0}
+  @media (max-width:1080px){ .painel{position:static;max-height:none;border-right:0;
+          border-bottom:1px solid var(--ui-linha)} }
+
+  .marca{display:flex;align-items:center;gap:11px;padding-bottom:18px;
+         border-bottom:1px solid var(--ui-linha)}
+  .marca h1{margin:0;font-family:var(--geo);font-size:15px;font-weight:400;
+            letter-spacing:.22em;text-transform:uppercase}
+  .marca p{margin:2px 0 0;font-size:11.5px;color:var(--ui-sub);letter-spacing:.04em}
+
+  fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
+  legend{font-family:var(--geo);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+         color:var(--ui-acento);padding:0 0 9px;width:100%;border-bottom:1px solid var(--ui-linha);
+         margin-bottom:3px}
+  label{display:block;font-size:12px;color:var(--ui-sub);margin-bottom:4px;letter-spacing:.02em}
+  input[type=text],input[type=number],select,textarea{
+    width:100%;padding:8px 10px;border:1px solid var(--ui-linha);border-radius:3px;
+    background:var(--ui-campo);color:var(--ui-txt);font:inherit;font-size:13.5px}
+  textarea{resize:vertical;min-height:62px;line-height:1.5}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,
+  .chk:focus-within{outline:2px solid var(--ui-acento);outline-offset:1px}
+  .dupla{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tripla{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+  .chks{display:flex;flex-direction:column;gap:2px}
+  .chk{display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:3px 0;cursor:pointer}
+  .chk input{margin:3px 0 0;accent-color:var(--ui-acento);flex:none}
+  .chk span{color:var(--ui-txt)}
+  .chk small{color:var(--ui-sub);font-size:11.5px;margin-left:auto;
+             font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:8px}
+
+  .nota{font-size:11.5px;color:var(--ui-sub);line-height:1.45;margin:0}
+  .ref{background:var(--ui-bg);border:1px solid var(--ui-linha);border-radius:3px;
+       padding:9px 11px;font-size:11.5px;color:var(--ui-sub);line-height:1.5}
+  .ref b{color:var(--ui-txt);font-weight:600}
+
+  .acoes{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:0;
+         background:var(--ui-card);padding-top:12px;margin-top:auto}
+  button{font:inherit;font-size:13px;padding:9px 15px;border-radius:3px;cursor:pointer;
+         border:1px solid var(--ui-linha);background:var(--ui-campo);color:var(--ui-txt);
+         transition:opacity .15s}
+  button:hover{opacity:.82}
+  button.primario{background:var(--ui-acento);border-color:var(--ui-acento);color:#FBF9F6}
+  .salvo{font-size:11.5px;color:var(--ui-sub);align-self:center}
+
+  /* ---------------- palco ---------------- */
+  .palco{padding:30px;display:flex;flex-direction:column;align-items:center;gap:24px;
+         overflow-x:auto}
+
+  /* ---------------- documento ---------------- */
+  .pag{width:297mm;height:210mm;background:var(--osso);color:var(--tinta);
+       position:relative;overflow:hidden;flex:none;
+       box-shadow:0 1px 3px rgba(58,55,51,.13),0 10px 34px rgba(58,55,51,.10)}
+  .pag .corpo{position:absolute;inset:0 78mm 0 0;padding:19mm 15mm 15mm 21mm;
+              display:flex;flex-direction:column}
+  .pag.capa .corpo{inset:0 78mm 0 0}
+
+  /* trilho lateral com a marca, igual ao material dela */
+  .trilho{position:absolute;top:0;right:0;bottom:0;width:78mm;border-left:1px solid var(--linha);
+          display:flex;flex-direction:column;justify-content:space-between;align-items:center}
+  .trilho .bloco{width:100%;height:26mm;background:var(--areia)}
+  .trilho .meio{flex:1;display:flex;align-items:center;justify-content:center;gap:7mm;
+                writing-mode:vertical-rl}
+  .trilho .vert{font-family:var(--geo);font-size:15pt;letter-spacing:.34em;
+                text-transform:uppercase;color:#B6A794}
+  .trilho .vert.forte{color:var(--taupe-forte)}
+
+  h2.titulo{font-family:var(--geo);font-weight:400;font-size:20pt;letter-spacing:.15em;
+            text-transform:uppercase;color:var(--taupe-forte);margin:0 0 7mm;
+            text-wrap:balance}
+  h3.sub{font-family:var(--geo);font-weight:400;font-size:10.5pt;letter-spacing:.18em;
+         text-transform:uppercase;color:var(--taupe-forte);margin:0 0 3mm}
+  .pag p{margin:0 0 3mm;font-size:10pt;line-height:1.62;color:var(--tinta);max-width:64ch}
+
+  /* capa */
+  .capa .corpo{justify-content:space-between}
+  .capa .grande{font-family:var(--geo);font-weight:300;font-size:44pt;letter-spacing:.13em;
+                text-transform:uppercase;color:#C0B0A0;margin:0;line-height:1}
+  .capa .tipo{font-family:var(--geo);font-size:10pt;letter-spacing:.24em;text-transform:uppercase;
+              color:var(--taupe-forte);margin:4mm 0 0}
+  .capa .quem{font-family:var(--caligrafia);font-size:25pt;color:var(--tinta);margin:7mm 0 0;
+              line-height:1.25}
+  .capa .local{font-size:10pt;color:var(--suave);margin:3mm 0 0;letter-spacing:.03em}
+  .assinatura{display:flex;align-items:center;gap:9px}
+  .assinatura .nome{font-family:var(--geo);font-size:17pt;letter-spacing:.2em;
+                    text-transform:uppercase;color:#A2917F}
+  .assinatura .data{font-size:9pt;color:var(--suave);margin-left:auto}
+
+  /* etapas */
+  .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:9mm;margin-top:2mm}
+  .etapa{border-top:2px solid var(--taupe);padding-top:4mm}
+  .etapa h4{font-family:var(--geo);font-weight:400;font-size:10pt;letter-spacing:.13em;
+            text-transform:uppercase;margin:0 0 3mm;color:var(--tinta)}
+  .etapa ul{margin:0;padding-left:4mm;font-size:9pt;line-height:1.7;color:var(--tinta)}
+  .etapa .prazo{margin-top:4mm;font-family:var(--geo);font-size:8pt;letter-spacing:.11em;
+                text-transform:uppercase;color:var(--taupe-forte)}
+
+  /* listas */
+  .duascol{display:grid;grid-template-columns:1fr 1.35fr;gap:12mm;flex:1;min-height:0}
+  .lista{list-style:none;margin:0;padding:0;font-size:9.5pt;line-height:1.85}
+  .lista li{position:relative;padding-left:6mm}
+  .lista li::before{content:"";position:absolute;left:0;top:1.5mm;width:2.6mm;height:1.4mm;
+    border-left:1.3px solid var(--taupe);border-bottom:1.3px solid var(--taupe);
+    transform:rotate(-45deg)}
+  .entregas{font-size:9pt;line-height:1.55}
+  .entregas dt{font-weight:600;margin-top:3mm;color:var(--tinta)}
+  .entregas dt:first-child{margin-top:0}
+  .entregas dd{margin:.6mm 0 0;color:#59544D}
+
+  /* investimento */
+  .tabela{width:100%;border-collapse:collapse;margin-top:2mm;font-size:10pt}
+  .tabela th{background:var(--taupe);color:#4A3E33;font-family:var(--geo);font-weight:400;
+             font-size:9pt;letter-spacing:.1em;text-transform:uppercase;
+             padding:2.6mm 4mm;text-align:left}
+  .tabela th:last-child,.tabela td:last-child{text-align:right}
+  .tabela td{padding:2.6mm 4mm;border-bottom:1px solid var(--linha);
+             font-variant-numeric:tabular-nums}
+  .tabela tr.total td{border-bottom:0;border-top:2px solid var(--taupe);font-weight:700;
+                      font-size:12pt;padding-top:3.4mm}
+  .tabela td.desc{color:var(--suave);font-size:8.5pt;padding-top:0;border-bottom:0}
+  .condicoes{margin-top:auto;padding-top:5mm;border-top:1px solid var(--linha);
+             display:grid;grid-template-columns:1fr 1fr;gap:4mm 10mm;font-size:8.5pt;
+             line-height:1.6;color:#59544D}
+  .condicoes b{display:block;font-family:var(--geo);font-size:8pt;letter-spacing:.13em;
+               text-transform:uppercase;color:var(--taupe-forte);font-weight:400;
+               margin-bottom:.8mm}
+  .repasse{background:#E8E2D9;border-left:3px solid var(--taupe);padding:4mm 5mm;
+           margin-top:4mm;font-size:9pt;line-height:1.6}
+  .repasse strong{display:block;font-family:var(--geo);font-size:8.5pt;letter-spacing:.13em;
+                  text-transform:uppercase;color:var(--taupe-forte);font-weight:400;
+                  margin-bottom:1.5mm}
+  .vazio{color:#B3A899;font-style:italic}
+
+  /* ---------------- impressão ---------------- */
+  @page{size:A4 landscape;margin:0}
+  @media print{
+    .painel,.rotulo{display:none!important}
+    .app{display:block}
+    .palco{padding:0;gap:0;display:block}
+    .pag{box-shadow:none;break-after:page;page-break-after:always;margin:0}
+    .pag:last-child{break-after:auto;page-break-after:auto}
+    body{background:#fff}
+  }
+  .rotulo{font-family:var(--geo);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+          color:var(--ui-sub);align-self:flex-start;margin-left:calc(50% - 148mm)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <!-- ============ PAINEL ============ -->
+  <form class="painel" id="painel" autocomplete="off">
+    <div class="marca">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M2 3 L13 3 L7.5 13 Z" fill="#A2917F"/>
+        <path d="M13 3 L24 3 L13 23 Z" fill="#CBBBA9"/>
+      </svg>
+      <div>
+        <h1>Junia Vaz</h1>
+        <p>Gerador de propostas</p>
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>Cliente e projeto</legend>
+      <div>
+        <label for="cliente">Cliente(s) — como aparece na capa</label>
+        <input type="text" id="cliente" placeholder="Ex.: Marina e Rafael">
+      </div>
+      <div>
+        <label for="local">Imóvel / cidade</label>
+        <input type="text" id="local" placeholder="Apartamento em Itabira">
+      </div>
+      <div class="dupla">
+        <div>
+          <label for="tipo">Tipo de trabalho</label>
+          <select id="tipo">
+            <option value="interiores">Design de Interiores</option>
+            <option value="arquitetura">Projeto de Arquitetura</option>
+            <option value="completo">Arquitetura + Interiores</option>
+            <option value="obra">Administração de Obra</option>
+          </select>
+        </div>
+        <div>
+          <label for="porte">Porte</label>
+          <select id="porte">
+            <option value="compacto">Compacto</option>
+            <option value="medio" selected>Médio</option>
+            <option value="amplo">Amplo</option>
+          </select>
+        </div>
+      </div>
+      <p class="nota">O porte define os prazos das três etapas. Dá para ajustar depois.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Programa de ambientes</legend>
+      <div class="chks" id="ambientes"></div>
+      <div>
+        <label for="extraAmb">Outros ambientes (um por linha)</label>
+        <textarea id="extraAmb" placeholder="Varanda gourmet&#10;Home office"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>O que será entregue</legend>
+      <div class="chks" id="entregas"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Investimento</legend>
+      <div>
+        <label for="modo">Como calcular o valor do projeto</label>
+        <select id="modo">
+          <option value="fechado">Valor fechado</option>
+          <option value="ambiente">Por ambiente</option>
+          <option value="m2">Por metro quadrado</option>
+        </select>
+      </div>
+      <div class="dupla" id="camposPreco"></div>
+      <div class="ref" id="referencia"></div>
+      <div class="chks" id="adicionais"></div>
+      <div>
+        <label for="obs">Observação na tabela (opcional)</label>
+        <input type="text" id="obs" placeholder="Ex.: valor válido para o programa acima">
+      </div>
+    </fieldset>
+
+    <fieldset id="blocoObra" hidden>
+      <legend>Administração de obra</legend>
+      <div class="dupla">
+        <div>
+          <label for="obraValor">Orçamento previsto da obra (R$)</label>
+          <input type="number" id="obraValor" value="0" min="0" step="1000">
+        </div>
+        <div>
+          <label for="obraTaxa">Taxa de administração (%)</label>
+          <input type="number" id="obraTaxa" value="15" min="0" step="0.5">
+        </div>
+      </div>
+      <p class="nota">O honorário é a taxa sobre o orçamento. O restante é repasse a
+        fornecedores — entra e sai da conta, não é receita. A proposta explica isso ao cliente.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Condições</legend>
+      <div>
+        <label for="pagamento">Condição de pagamento</label>
+        <select id="pagamento">
+          <option value="30/40/30">30% assinatura · 40% anteprojeto · 30% entrega</option>
+          <option value="50/50">50% assinatura · 50% entrega</option>
+          <option value="40/30/30">40% assinatura · 30% anteprojeto · 30% entrega</option>
+          <option value="avista">À vista na assinatura (5% de desconto)</option>
+          <option value="obra">Taxa mensal durante a obra</option>
+          <option value="livre">Escrever à mão</option>
+        </select>
+      </div>
+      <div id="pagLivreWrap" hidden>
+        <label for="pagLivre">Texto da condição</label>
+        <input type="text" id="pagLivre" placeholder="Ex.: 3 parcelas iguais">
+      </div>
+      <div class="tripla">
+        <div>
+          <label for="validade">Validade (dias)</label>
+          <input type="number" id="validade" value="15" min="1">
+        </div>
+        <div>
+          <label for="revisoes">Revisões</label>
+          <input type="number" id="revisoes" value="2" min="0">
+        </div>
+        <div>
+          <label for="visitas">Visitas</label>
+          <input type="number" id="visitas" value="3" min="0">
+        </div>
+      </div>
+      <div>
+        <label for="naoInclui">O que não está incluso</label>
+        <textarea id="naoInclui">Execução da obra e contratação de mão de obra. Materiais, mobiliário e acabamentos. Projetos complementares (estrutural, hidrossanitário, elétrico executivo). Taxas de aprovação e emolumentos.</textarea>
+      </div>
+      <div>
+        <label for="dataProp">Data da proposta</label>
+        <input type="text" id="dataProp" placeholder="dd/mm/aaaa">
+      </div>
+    </fieldset>
+
+    <div class="acoes">
+      <button type="button" class="primario" id="btnPdf">Exportar PDF</button>
+      <button type="button" id="btnLimpar">Nova proposta</button>
+      <span class="salvo" id="salvo"></span>
+    </div>
+  </form>
+
+  <!-- ============ PALCO ============ -->
+  <div class="palco">
+    <span class="rotulo">Pré-visualização — 4 páginas A4 paisagem</span>
+    <div id="doc"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var BIO = "Arquiteta há mais de vinte anos, atuo no mercado desenvolvendo projetos "+
+    "residenciais e comerciais que traduzem os sonhos dos meus clientes com harmonia, "+
+    "praticidade e beleza, garantindo que cada projeto seja uma expressão única de "+
+    "criatividade e inovação.";
+  var BIO2 = "Com vasto conhecimento em arquitetura e design de interiores, estou sempre "+
+    "à frente das tendências, oferecendo soluções projetuais que se destacam pela "+
+    "originalidade e funcionalidade.";
+
+  var TIPOS = {
+    interiores:{rotulo:"Projeto de Design de Interiores", capa:"Projeto Design de Interiores",
+                linha:"Projeto de Design de Interiores"},
+    arquitetura:{rotulo:"Projeto de Arquitetura", capa:"Projeto de Arquitetura",
+                linha:"Projeto de Arquitetura"},
+    completo:{rotulo:"Arquitetura e Interiores", capa:"Projeto de Arquitetura e Interiores",
+              linha:"Projeto de Arquitetura e Interiores"},
+    obra:{rotulo:"Administração de Obra", capa:"Administração de Obra",
+          linha:"Administração de obra — honorário"}
+  };
+
+  var PRAZOS = {
+    compacto:[10,10,20], medio:[10,15,30], amplo:[15,20,45]
+  };
+
+  var ETAPAS = {
+    interiores:[
+      ["Estudo Preliminar",["Reunião de briefing","Levantamento de medidas","Estudo de layout em planta"]],
+      ["Anteprojeto",["Conceito e moodboard","Imagens 3D dos ambientes","Ajustes após sua leitura"]],
+      ["Projeto Executivo",["Detalhamento para execução","Marcenaria e mobiliário","Memorial de revestimentos"]]
+    ],
+    arquitetura:[
+      ["Estudo Preliminar",["Reunião de briefing","Levantamento de medidas","Estudo de layout em planta"]],
+      ["Anteprojeto",["Proposta de planta baixa","Imagens 3D da fachada","Ajustes após sua leitura"]],
+      ["Projeto Executivo",["Planta baixa e cobertura","Cortes, elevações e fachada","Quadro de esquadrias"]]
+    ],
+    completo:[
+      ["Estudo Preliminar",["Reunião de briefing","Levantamento de medidas","Estudo de layout em planta"]],
+      ["Anteprojeto",["Conceito e moodboard","Imagens 3D de fachada e interiores","Ajustes após sua leitura"]],
+      ["Projeto Executivo",["Arquitetônico completo","Detalhamento de interiores","Marcenaria e revestimentos"]]
+    ],
+    obra:[
+      ["Planejamento",["Leitura do projeto executivo","Orçamento e cronograma","Seleção de fornecedores"]],
+      ["Execução",["Contratação e coordenação","Visitas de acompanhamento","Medição e liberação de pagamentos"]],
+      ["Entrega",["Vistoria final","Lista de pendências","Prestação de contas"]]
+    ]
+  };
+
+  var AMBIENTES = ["Living e jantar","Cozinha","Área de serviço","Lavabo","Hall",
+    "Suíte master","Closet","Banho da suíte","Quarto 1","Quarto 2","Banho social",
+    "Escritório","Circulação íntima","Varanda","Fachada","Garagem"];
+
+  var ENTREGAS = [
+    ["3d","Imagens 3D","Perspectiva em três dimensões de cada ambiente.",["interiores","completo","arquitetura"]],
+    ["cotada","Planta Baixa Cotada","Planta técnica com todas as medidas para execução.",["interiores","arquitetura","completo"]],
+    ["eletrica","Planta de Pontos Elétricos","Localização de tomadas e interruptores.",["interiores","completo"]],
+    ["ilum","Planta de Iluminação","Pontos de luz, tipos de luminárias e circuitos.",["interiores","completo"]],
+    ["forro","Paginação de Forro e Piso","Paginação executiva de forro, piso e revestimentos.",["interiores","completo"]],
+    ["marcenaria","Projeto de Marcenaria","Detalhamento dos móveis planejados, com medidas e acabamentos.",["interiores","completo"]],
+    ["mobiliario","Projeto de Mobiliário Solto","Móveis soltos, cortinas e persianas, com sugestões e disposição.",["interiores","completo"]],
+    ["marmoraria","Marmoraria","Detalhamento de bancadas e peças em pedra.",["interiores","completo"]],
+    ["memorial","Memorial Descritivo","Especificação de revestimentos, acabamentos e adornos.",["interiores","completo"]],
+    ["cortes","Cortes e Elevações","Cortes, elevações e fachada do projeto.",["arquitetura","completo"]],
+    ["cobertura","Planta de Cobertura","Planta de cobertura e telhado.",["arquitetura","completo"]],
+    ["esquadrias","Quadro de Esquadrias","Especificação de portas e janelas.",["arquitetura","completo"]],
+    ["orcamento","Orçamento e Cronograma","Orçamento detalhado da obra e cronograma físico-financeiro.",["obra"]],
+    ["fornecedores","Coordenação de Fornecedores","Cotação, contratação e gestão dos executores.",["obra"]],
+    ["medicao","Medição e Prestação de Contas","Relatório periódico de gastos e avanço da obra.",["obra"]],
+    ["acomp","Acompanhamento Presencial","Visitas à obra e acompanhamento em lojas para escolha de materiais, auxílio técnico e apresentação de orçamentos.",["interiores","arquitetura","completo","obra"]]
+  ];
+
+  var ADICIONAIS = [
+    ["prefeitura","Aprovação de projeto em prefeitura",4000,"Trâmite legal e técnico junto à prefeitura para análise, validação e aprovação."],
+    ["rrt","RRT de responsabilidade técnica",300,"Registro de Responsabilidade Técnica junto ao CAU."],
+    ["visitaExtra","Visita adicional à obra",250,"Cobrada por visita, além das inclusas."],
+    ["executivo","Projeto executivo complementar",0,"Detalhamento adicional combinado à parte."]
+  ];
+
+  var PRECO_PADRAO = {
+    interiores:{fechado:5400, ambiente:900, m2:75},
+    arquitetura:{fechado:8200, ambiente:1100, m2:95},
+    completo:{fechado:13500, ambiente:1500, m2:130},
+    obra:{fechado:0, ambiente:0, m2:0}
+  };
+
+  var REFS = {
+    interiores:"Faixa praticada pelo escritório: de <b>R$ 3.900</b> a <b>R$ 10.200</b>, conforme o número de ambientes e a profundidade do detalhamento.",
+    arquitetura:"Referência: <b>R$ 4.200</b> pelo projeto, mais <b>R$ 4.000</b> quando inclui aprovação em prefeitura.",
+    completo:"Referência para arquitetura e interiores no mesmo contrato: a partir de <b>R$ 13.500</b>.",
+    obra:"Honorário é a taxa sobre o orçamento da obra. Defina a taxa antes de enviar — é o que separa honorário de repasse."
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var doc = $("doc"), salvo = $("salvo"), timer = null;
+
+  function moeda(v){
+    return "R$ " + (Number(v)||0).toLocaleString("pt-BR",
+      {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function esc(s){
+    return String(s==null?"":s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; });
+  }
+  function hoje(){
+    var d = new Date();
+    return ("0"+d.getDate()).slice(-2)+"/"+("0"+(d.getMonth()+1)).slice(-2)+"/"+d.getFullYear();
+  }
+
+  /* ---------- monta os controles dinâmicos ---------- */
+  function montaAmbientes(){
+    $("ambientes").innerHTML = AMBIENTES.map(function(a,i){
+      return '<label class="chk"><input type="checkbox" data-amb="'+esc(a)+'"'+
+             (i<5?" checked":"")+'><span>'+esc(a)+'</span></label>';
+    }).join("");
+  }
+  function montaEntregas(){
+    var tipo = $("tipo").value;
+    var atual = {};
+    document.querySelectorAll("[data-ent]").forEach(function(c){ atual[c.dataset.ent]=c.checked; });
+    $("entregas").innerHTML = ENTREGAS.filter(function(e){ return e[3].indexOf(tipo)>=0; })
+      .map(function(e){
+        var on = (e[0] in atual) ? atual[e[0]] : true;
+        return '<label class="chk"><input type="checkbox" data-ent="'+e[0]+'"'+(on?" checked":"")+
+               '><span>'+esc(e[1])+'</span></label>';
+      }).join("");
+  }
+  function montaAdicionais(){
+    $("adicionais").innerHTML = ADICIONAIS.map(function(a){
+      return '<label class="chk"><input type="checkbox" data-add="'+a[0]+'"><span>'+esc(a[1])+
+             '</span><small>'+(a[2]?moeda(a[2]):"a combinar")+'</small></label>';
+    }).join("");
+  }
+  function montaCamposPreco(){
+    var modo = $("modo").value, tipo = $("tipo").value, p = PRECO_PADRAO[tipo];
+    var h = "";
+    if(modo==="fechado"){
+      h = '<div style="grid-column:1/-1"><label for="pFechado">Valor do projeto (R$)</label>'+
+          '<input type="number" id="pFechado" value="'+p.fechado+'" min="0" step="100"></div>';
+    } else if(modo==="ambiente"){
+      h = '<div><label for="pUnit">R$ por ambiente</label>'+
+          '<input type="number" id="pUnit" value="'+p.ambiente+'" min="0" step="50"></div>'+
+          '<div><label>Ambientes marcados</label>'+
+          '<input type="text" id="pQtd" value="0" readonly></div>';
+    } else {
+      h = '<div><label for="pM2">R$ por m²</label>'+
+          '<input type="number" id="pM2" value="'+p.m2+'" min="0" step="5"></div>'+
+          '<div><label for="pArea">Área (m²)</label>'+
+          '<input type="number" id="pArea" value="80" min="0" step="1"></div>';
+    }
+    $("camposPreco").innerHTML = h;
+  }
+
+  /* ---------- lê o estado ---------- */
+  function ler(){
+    var d = {};
+    d.cliente = $("cliente").value.trim();
+    d.local = $("local").value.trim();
+    d.tipo = $("tipo").value;
+    d.porte = $("porte").value;
+    d.ambientes = [].map.call(document.querySelectorAll("[data-amb]:checked"),
+                              function(c){ return c.dataset.amb; });
+    $("extraAmb").value.split("\n").forEach(function(l){
+      l = l.trim(); if(l) d.ambientes.push(l); });
+    d.entregas = ENTREGAS.filter(function(e){
+      var c = document.querySelector('[data-ent="'+e[0]+'"]');
+      return c && c.checked;
+    });
+    d.modo = $("modo").value;
+    d.obs = $("obs").value.trim();
+    d.validade = $("validade").value;
+    d.revisoes = $("revisoes").value;
+    d.visitas = $("visitas").value;
+    d.naoInclui = $("naoInclui").value.trim();
+    d.data = $("dataProp").value.trim() || hoje();
+    d.pagamento = $("pagamento").value;
+    d.pagLivre = $("pagLivre").value.trim();
+
+    // valor base
+    if(d.tipo==="obra"){
+      d.obraValor = Number($("obraValor").value)||0;
+      d.obraTaxa = Number($("obraTaxa").value)||0;
+      d.base = d.obraValor * d.obraTaxa/100;
+    } else if(d.modo==="fechado"){
+      d.base = Number(($("pFechado")||{}).value)||0;
+    } else if(d.modo==="ambiente"){
+      var u = Number(($("pUnit")||{}).value)||0;
+      d.base = u * d.ambientes.length;
+      if($("pQtd")) $("pQtd").value = d.ambientes.length + " ambiente" +
+        (d.ambientes.length===1?"":"s");
+    } else {
+      d.base = (Number(($("pM2")||{}).value)||0) * (Number(($("pArea")||{}).value)||0);
+      d.area = Number(($("pArea")||{}).value)||0;
+    }
+
+    d.adicionais = ADICIONAIS.filter(function(a){
+      var c = document.querySelector('[data-add="'+a[0]+'"]');
+      return c && c.checked;
+    });
+    d.total = d.base + d.adicionais.reduce(function(s,a){ return s+a[2]; },0);
+    if(d.pagamento==="avista") d.desconto = d.total*0.05;
+    return d;
+  }
+
+  function textoPagamento(d){
+    var t = d.total;
+    switch(d.pagamento){
+      case "30/40/30": return "30% na assinatura ("+moeda(t*.3)+"), 40% na aprovação do "+
+        "anteprojeto ("+moeda(t*.4)+") e 30% na entrega do executivo ("+moeda(t*.3)+").";
+      case "40/30/30": return "40% na assinatura ("+moeda(t*.4)+"), 30% na aprovação do "+
+        "anteprojeto ("+moeda(t*.3)+") e 30% na entrega ("+moeda(t*.3)+").";
+      case "50/50": return "50% na assinatura ("+moeda(t*.5)+") e 50% na entrega ("+moeda(t*.5)+").";
+      case "avista": return "Pagamento integral na assinatura, com 5% de desconto: "+
+        moeda(t-(d.desconto||0))+".";
+      case "obra": return "Honorário dividido em parcelas mensais iguais ao longo da obra, "+
+        "pagas junto com a medição do mês.";
+      default: return d.pagLivre || "A combinar.";
+    }
+  }
+
+  /* ---------- render ---------- */
+  function trilho(destaque){
+    return '<div class="trilho"><div class="bloco"></div>'+
+      '<div class="meio"><span class="vert">Proposta</span>'+
+      '<span class="vert forte">Junia Vaz</span></div>'+
+      '<div class="bloco"></div></div>';
+  }
+
+  function render(){
+    var d = ler(), T = TIPOS[d.tipo], pr = PRAZOS[d.porte], et = ETAPAS[d.tipo];
+    var paginas = [];
+
+    /* capa */
+    paginas.push('<section class="pag capa"><div class="corpo">'+
+      '<div><p class="grande">Proposta</p>'+
+      '<p class="tipo">'+esc(T.capa)+'</p>'+
+      '<p class="quem">'+(d.cliente?esc(d.cliente):'<span class="vazio">nome do cliente</span>')+'</p>'+
+      (d.local?'<p class="local">'+esc(d.local)+'</p>':'')+
+      '</div>'+
+      '<div class="assinatura">'+
+      '<svg width="30" height="30" viewBox="0 0 26 26" aria-hidden="true">'+
+      '<path d="M2 3 L13 3 L7.5 13 Z" fill="#A2917F"/>'+
+      '<path d="M13 3 L24 3 L13 23 Z" fill="#CBBBA9"/></svg>'+
+      '<span class="nome">Junia Vaz</span>'+
+      '<span class="data">'+esc(d.data)+'</span></div>'+
+      '</div>'+trilho()+'</section>');
+
+    /* etapas */
+    paginas.push('<section class="pag"><div class="corpo">'+
+      '<h2 class="titulo">Como trabalhamos</h2>'+
+      '<p>'+BIO+'</p><p>'+BIO2+'</p>'+
+      '<div class="etapas">'+ et.map(function(e,i){
+        return '<div class="etapa"><h4>'+esc(e[0])+'</h4><ul>'+
+          e[1].map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("")+
+          '</ul><div class="prazo">'+pr[i]+' dias'+
+          (i===0?" após a assinatura":i===1?" após aprovação do layout":" após aprovação do 3D")+
+          '</div></div>';
+      }).join("") +'</div>'+
+      '</div>'+trilho()+'</section>');
+
+    /* programa + entregas */
+    paginas.push('<section class="pag"><div class="corpo">'+
+      '<h2 class="titulo">Escopo</h2>'+
+      '<div class="duascol">'+
+      '<div><h3 class="sub">Programa</h3><ul class="lista">'+
+        (d.ambientes.length ? d.ambientes.map(function(a){ return "<li>"+esc(a)+"</li>"; }).join("")
+         : '<li class="vazio">selecione os ambientes</li>')+
+      '</ul></div>'+
+      '<div><h3 class="sub">O que será entregue</h3><dl class="entregas">'+
+        (d.entregas.length ? d.entregas.map(function(e){
+            var txt = e[2];
+            if(e[0]==="acomp") txt = d.visitas+" visita"+(d.visitas==1?"":"s")+
+              " à obra durante a execução. "+e[2];
+            return "<dt>"+esc(e[1])+"</dt><dd>"+esc(txt)+"</dd>";
+          }).join("") : '<dt class="vazio">selecione os entregáveis</dt>')+
+      '</dl></div></div>'+
+      '</div>'+trilho()+'</section>');
+
+    /* investimento */
+    var linhas = "";
+    if(d.tipo==="obra"){
+      linhas += '<tr><td>'+esc(T.linha)+' — '+d.obraTaxa+'% sobre '+moeda(d.obraValor)+
+                '</td><td>'+moeda(d.base)+'</td></tr>';
+    } else {
+      var det = "";
+      if(d.modo==="ambiente") det = d.ambientes.length+" ambientes";
+      if(d.modo==="m2") det = (d.area||0)+" m²";
+      linhas += '<tr><td>'+esc(T.linha)+(det?' <span style="color:#8C857B">('+det+')</span>':'')+
+                '</td><td>'+moeda(d.base)+'</td></tr>';
+    }
+    d.adicionais.forEach(function(a){
+      linhas += '<tr><td>'+esc(a[1])+'</td><td>'+(a[2]?moeda(a[2]):"a combinar")+'</td></tr>'+
+                '<tr><td class="desc" colspan="2">'+esc(a[3])+'</td></tr>';
+    });
+    if(d.obs) linhas += '<tr><td class="desc" colspan="2">'+esc(d.obs)+'</td></tr>';
+
+    var repasse = d.tipo==="obra" ?
+      '<div class="repasse"><strong>O que é honorário e o que é repasse</strong>'+
+      'O valor acima é o honorário de administração. Os pagamentos a fornecedores, '+
+      'mão de obra e materiais — previstos em '+moeda(d.obraValor)+' — são repassados '+
+      'integralmente aos executores, com prestação de contas mensal. Esses valores '+
+      'transitam pela conta do escritório mas não constituem receita.</div>' : '';
+
+    paginas.push('<section class="pag"><div class="corpo">'+
+      '<h2 class="titulo">Investimento</h2>'+
+      '<table class="tabela"><thead><tr><th>Serviço</th><th>Valor</th></tr></thead>'+
+      '<tbody>'+linhas+
+      '<tr class="total"><td>Total</td><td>'+moeda(d.total)+'</td></tr></tbody></table>'+
+      repasse+
+      '<div class="condicoes">'+
+      '<div><b>Pagamento</b>'+esc(textoPagamento(d))+'</div>'+
+      '<div><b>Validade</b>Esta proposta é válida por '+esc(d.validade)+' dias a partir de '+
+        esc(d.data)+'.</div>'+
+      '<div><b>Revisões</b>Estão inclusas '+esc(d.revisoes)+' rodadas de alteração por etapa. '+
+        'Revisões além disso são orçadas à parte.</div>'+
+      '<div><b>Não está incluso</b>'+esc(d.naoInclui)+'</div>'+
+      '</div>'+
+      '</div>'+trilho()+'</section>');
+
+    doc.innerHTML = paginas.join("");
+    guardar();
+  }
+
+  /* ---------- persistência ---------- */
+  var CHAVE = "propostas-junia-v1";
+  function guardar(){
+    var estado = {};
+    document.querySelectorAll("#painel input,#painel select,#painel textarea").forEach(function(el){
+      var k = el.id || (el.dataset.amb?"amb:"+el.dataset.amb:
+                        el.dataset.ent?"ent:"+el.dataset.ent:
+                        el.dataset.add?"add:"+el.dataset.add:null);
+      if(!k) return;
+      estado[k] = (el.type==="checkbox") ? el.checked : el.value;
+    });
+    try{ localStorage.setItem(CHAVE, JSON.stringify(estado)); }catch(e){}
+    clearTimeout(timer);
+    salvo.textContent = "salvo";
+    timer = setTimeout(function(){ salvo.textContent=""; }, 1600);
+  }
+  function restaurar(){
+    var estado;
+    try{ estado = JSON.parse(localStorage.getItem(CHAVE)||"null"); }catch(e){}
+    if(!estado) return false;
+    Object.keys(estado).forEach(function(k){
+      var el = k.indexOf("amb:")===0 ? document.querySelector('[data-amb="'+k.slice(4)+'"]') :
+               k.indexOf("ent:")===0 ? document.querySelector('[data-ent="'+k.slice(4)+'"]') :
+               k.indexOf("add:")===0 ? document.querySelector('[data-add="'+k.slice(4)+'"]') :
+               document.getElementById(k);
+      if(!el) return;
+      if(el.type==="checkbox") el.checked = estado[k]; else el.value = estado[k];
+    });
+    return true;
+  }
+
+  /* ---------- eventos ---------- */
+  $("tipo").addEventListener("change", function(){
+    montaEntregas(); montaCamposPreco(); sincronizaTipo(); render();
+  });
+  $("modo").addEventListener("change", function(){ montaCamposPreco(); render(); });
+  $("pagamento").addEventListener("change", function(){
+    $("pagLivreWrap").hidden = this.value !== "livre"; render();
+  });
+  $("painel").addEventListener("input", render);
+  $("painel").addEventListener("change", render);
+  $("btnPdf").addEventListener("click", function(){ window.print(); });
+  $("btnLimpar").addEventListener("click", function(){
+    if(!confirm("Limpar tudo e começar uma proposta nova?")) return;
+    try{ localStorage.removeItem(CHAVE); }catch(e){}
+    location.reload();
+  });
+
+  function sincronizaTipo(){
+    var obra = $("tipo").value === "obra";
+    $("blocoObra").hidden = !obra;
+    $("modo").disabled = obra;
+    $("modo").parentNode.style.display = obra ? "none" : "";
+    $("camposPreco").style.display = obra ? "none" : "";
+    $("referencia").innerHTML = REFS[$("tipo").value];
+    if(obra && $("pagamento").value !== "obra") $("pagamento").value = "obra";
+  }
+
+  /* ---------- início ---------- */
+  montaAmbientes(); montaEntregas(); montaAdicionais(); montaCamposPreco();
+  restaurar();
+  montaEntregas(); montaCamposPreco(); restaurar();
+  if(!$("dataProp").value) $("dataProp").value = hoje();
+  $("pagLivreWrap").hidden = $("pagamento").value !== "livre";
+  sincronizaTipo();
+  render();
+})();
+</script>
