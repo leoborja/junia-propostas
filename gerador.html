@@ -532,8 +532,10 @@
   }
 
   function montaFotos(){
-    $("capaFoto").innerHTML = '<option value="">Sem foto (capa limpa)</option>' +
-      FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("");
+    $("capaFoto").innerHTML =
+      FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("") +
+      '<option value="">Sem foto (capa limpa)</option>';
+    $("capaFoto").value = FOTOS[0][0];          // abre já com imagem
     $("portfolio").innerHTML = FOTOS.map(function(f,i){
       return '<label class="chk"><input type="checkbox" data-pf="'+f[0]+'"'+
              (i<3?" checked":"")+'><span>'+esc(f[1])+'</span></label>';
