@@ -374,6 +374,7 @@
       <button type="button" class="primario" id="btnPdf">Exportar PDF</button>
       <button type="button" id="btnLimpar">Nova proposta</button>
       <span class="salvo" id="salvo"></span>
+      <span class="salvo" style="margin-left:auto;opacity:.6">v2</span>
     </div>
   </form>
 
@@ -760,7 +761,7 @@
   }
 
   /* ---------- persistência ---------- */
-  var CHAVE = "propostas-junia-v1";
+  var CHAVE = "propostas-junia-v2";
   function guardar(){
     var estado = {};
     document.querySelectorAll("#painel input,#painel select,#painel textarea").forEach(function(el){
@@ -776,6 +777,7 @@
     timer = setTimeout(function(){ salvo.textContent=""; }, 1600);
   }
   function restaurar(){
+    try{ localStorage.removeItem("propostas-junia-v1"); }catch(e){}
     var estado;
     try{ estado = JSON.parse(localStorage.getItem(CHAVE)||"null"); }catch(e){}
     if(!estado) return false;
@@ -787,6 +789,7 @@
       if(!el) return;
       if(el.type==="checkbox") el.checked = estado[k]; else el.value = estado[k];
     });
+    if(!$("capaFoto").value && !("capaFoto" in estado)) $("capaFoto").value = FOTOS[0][0];
     return true;
   }
 
