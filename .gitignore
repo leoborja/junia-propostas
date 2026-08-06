@@ -1,0 +1,6 @@
+# propostas reais de clientes nunca entram no repo público
+exemplos/*.pdf
+exemplos/*.png
+exemplos/*.jpg
+*.pdf
+.DS_Store
