@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <meta charset="utf-8">
 <title>Gerador de Propostas — Junia Vaz Arquitetura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&family=Parisienne&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&family=Parisienne&family=Cormorant+Garamond&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -127,14 +128,25 @@
                     text-transform:uppercase;color:var(--bronze)}
   .assinatura .data{font-size:9pt;color:#5E5A56;margin-left:auto}
 
-  /* etapas */
-  .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:9mm;margin-top:2mm}
-  .etapa{border-top:2px solid var(--bronze);padding-top:4mm}
-  .etapa h4{font-family:var(--geo);font-weight:400;font-size:10pt;letter-spacing:.13em;
-            text-transform:uppercase;margin:0 0 3mm;color:var(--tinta)}
-  .etapa ul{margin:0;padding-left:4mm;font-size:9pt;line-height:1.7;color:var(--tinta)}
-  .etapa .prazo{margin-top:4mm;font-family:var(--geo);font-size:7.5pt;letter-spacing:.11em;
-                text-transform:uppercase;color:var(--bronze)}
+  /* etapas — reproduz o slide ETAPAS do material original */
+  .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;flex:1;min-height:0}
+  .etapa{display:flex;flex-direction:column;min-height:0}
+  .etapa .ilus{height:48mm;background-size:cover;background-position:center;flex:none;
+               background-color:#E8E4DF}
+  .etapa .tira{height:4mm;background:var(--taupe);flex:none}
+  .etapa .num{font-family:"Cormorant Garamond",Georgia,serif;font-size:20pt;color:#9C8055;
+              line-height:1;margin:2.5mm 0 2mm;font-weight:400}
+  .etapa .painel{background:#8A6A45;color:#FFF;padding:4mm 5mm;flex:1;display:flex;
+                 flex-direction:column;min-height:0}
+  .etapa h4{font-family:var(--geo);font-weight:500;font-size:9.5pt;margin:0 0 2.5mm;color:#FFF}
+  .etapa ul{margin:0;padding-left:4mm;font-size:8.5pt;line-height:1.55;color:#FFF}
+  .etapa .prazo{margin-top:auto;padding-top:3mm;font-family:var(--geo);font-size:7pt;
+                letter-spacing:.1em;text-transform:uppercase;color:#F5EADB}
+  .comotrab .cab{text-align:center;margin-bottom:5mm}
+  .comotrab .cab h2{margin:0}
+  .comotrab .cab .script{font-family:var(--caligrafia);font-size:21pt;color:var(--tinta);
+                         line-height:1;margin-top:-3mm}
+  .comotrab .cab hr{border:0;border-top:1px solid var(--taupe);width:52%;margin:4mm auto 0}
 
   /* listas */
   .duascol{display:grid;grid-template-columns:1fr 1.35fr;gap:12mm;flex:1;min-height:0}
@@ -421,6 +433,8 @@
           linha:"Administração de obra — honorário"}
   };
 
+  var ILUSTRA = ["etapa-planta.jpg","etapa-moodboard.jpg","etapa-executivo.jpg"];
+
   var PRAZOS = {
     compacto:[10,10,20], medio:[10,15,30], amplo:[15,20,45]
   };
@@ -692,14 +706,19 @@
       '</div>'+trilho()+'</section>');
 
     /* etapas */
-    paginas.push('<section class="pag"><div class="corpo">'+
-      '<h2 class="titulo">Como trabalhamos</h2>'+
+    paginas.push('<section class="pag comotrab"><div class="corpo">'+
+      '<div class="cab"><h2 class="titulo">Etapas</h2>'+
+      '<div class="script">Prazos</div><hr></div>'+
       '<div class="etapas">'+ et.map(function(e,i){
-        return '<div class="etapa"><h4>'+esc(e[0])+'</h4><ul>'+
+        return '<div class="etapa">'+
+          '<div class="ilus" style="background-image:url(img/'+ILUSTRA[i]+')"></div>'+
+          '<div class="tira"></div>'+
+          '<div class="num">0'+(i+1)+'.</div>'+
+          '<div class="painel"><h4>'+esc(e[0])+'</h4><ul>'+
           e[1].map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("")+
-          '</ul><div class="prazo">'+pr[i]+' dias'+
+          '</ul><div class="prazo">Prazo — '+pr[i]+' dias'+
           (i===0?" após a assinatura":i===1?" após aprovação do layout":" após aprovação do 3D")+
-          '</div></div>';
+          '</div></div></div>';
       }).join("") +'</div>'+
       '</div>'+trilho()+'</section>');
 
