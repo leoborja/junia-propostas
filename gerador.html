@@ -8,15 +8,33 @@
 <style>
   :root{
     /* paleta extraída do material original da Junia (.pptx) */
-    --osso:#F3F3F3; --taupe:#D9CCBF; --taupe-forte:#A88C68; --tinta:#0E0E0E;
-    --linha:#E3DCD4; --areia:#D9CCBF; --suave:#5E5A56; --display:#9C8055;
-    --bronze:#7D6039; --faixa:#8F7449;
+    --osso:#F3F3F3; --taupe:#D9CCBF; --tinta:#0E0E0E;
+    --linha:#E3DCD4; --areia:#D9CCBF;
+    /* UM bronze para texto. Eram quatro quase idênticos e três reprovavam em
+       contraste sobre o osso (#A88C68 dava 2,86 — reprova até em texto grande).
+       Este dá 5,25 e é o único que passa em texto pequeno.
+       --faixa e --taupe são FUNDO, nunca cor de texto. */
+    --bronze:#7D6039; --display:#7D6039; --faixa:#8F7449;
     --ui-bg:#EBE7E1; --ui-card:#F7F5F2; --ui-txt:#3A3733; --ui-sub:#7C756C;
     --ui-linha:#DCD4C9; --ui-campo:#FFFFFF; --ui-acento:#8A7059;
     /* Poppins é a fonte real do material dela; Parisienne substitui a Brittany (comercial) */
     --geo:"Poppins","Futura","Century Gothic","Avenir Next",sans-serif;
     --corpo:"Poppins","Avenir Next","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
     --caligrafia:"Parisienne","Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
+
+    /* ESCALA TIPOGRÁFICA — 6 tamanhos para o documento, 4 para a interface.
+       Antes eram 25 valores diferentes misturando pt e px: deriva, não escala.
+       Regra: documento sempre em pt (vai para PDF), interface sempre em px.
+       Nada de valor solto — se precisar de um tamanho novo, o certo é rever a escala. */
+    --t-xs:8pt;    /* prazo, legenda, metadado */
+    --t-sm:9pt;    /* listas densas, condições */
+    --t-md:11pt;   /* CORPO — era 10pt; no celular 16:9 encolhe 0,41x */
+    --t-lg:14pt;   /* primeiro parágrafo, número de destaque */
+    --t-xl:22pt;   /* título de página */
+    --t-2xl:44pt;  /* capa */
+    --t-script:calc(var(--t-lg) * 2);  /* caligrafia: métrica menor, precisa de mais corpo */
+
+    --i-xs:11.5px; --i-sm:13px; --i-md:15px;   /* interface — 3 bastam */
   }
   @media (prefers-color-scheme:dark){
     :root{ --ui-bg:#1C1A17; --ui-card:#262320; --ui-txt:#E9E3DA; --ui-sub:#A79C8E;
@@ -32,7 +50,7 @@
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--ui-bg);color:var(--ui-txt);font-family:var(--corpo);
-       font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+       font-size:var(--i-md);line-height:1.55;-webkit-font-smoothing:antialiased}
 
   /* ---------------- app ---------------- */
   .app{display:grid;grid-template-columns:376px minmax(0,1fr);min-height:100vh}
@@ -46,18 +64,18 @@
 
   .marca{display:flex;align-items:center;gap:11px;padding-bottom:18px;
          border-bottom:1px solid var(--ui-linha)}
-  .marca h1{margin:0;font-family:var(--geo);font-size:15px;font-weight:400;
+  .marca h1{margin:0;font-family:var(--geo);font-size:var(--i-md);font-weight:400;
             letter-spacing:.22em;text-transform:uppercase}
-  .marca p{margin:2px 0 0;font-size:11.5px;color:var(--ui-sub);letter-spacing:.04em}
+  .marca p{margin:2px 0 0;font-size:var(--i-xs);color:var(--ui-sub);letter-spacing:.04em}
 
   fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
-  legend{font-family:var(--geo);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  legend{font-family:var(--geo);font-size:var(--i-xs);letter-spacing:.2em;text-transform:uppercase;
          color:var(--ui-acento);padding:0 0 9px;width:100%;border-bottom:1px solid var(--ui-linha);
          margin-bottom:3px}
-  label{display:block;font-size:12px;color:var(--ui-sub);margin-bottom:4px;letter-spacing:.02em}
+  label{display:block;font-size:var(--i-sm);color:var(--ui-sub);margin-bottom:4px;letter-spacing:.02em}
   input[type=text],input[type=number],select,textarea{
     width:100%;padding:8px 10px;border:1px solid var(--ui-linha);border-radius:3px;
-    background:var(--ui-campo);color:var(--ui-txt);font:inherit;font-size:13.5px}
+    background:var(--ui-campo);color:var(--ui-txt);font:inherit;font-size:var(--i-sm)}
   textarea{resize:vertical;min-height:62px;line-height:1.5}
   input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,
   .chk:focus-within{outline:2px solid var(--ui-acento);outline-offset:1px}
@@ -65,25 +83,25 @@
   .tripla{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 
   .chks{display:flex;flex-direction:column;gap:2px}
-  .chk{display:flex;align-items:flex-start;gap:8px;font-size:13px;padding:3px 0;cursor:pointer}
+  .chk{display:flex;align-items:flex-start;gap:8px;font-size:var(--i-sm);padding:3px 0;cursor:pointer}
   .chk input{margin:3px 0 0;accent-color:var(--ui-acento);flex:none}
   .chk span{color:var(--ui-txt)}
-  .chk small{color:var(--ui-sub);font-size:11.5px;margin-left:auto;
+  .chk small{color:var(--ui-sub);font-size:var(--i-xs);margin-left:auto;
              font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:8px}
 
-  .nota{font-size:11.5px;color:var(--ui-sub);line-height:1.45;margin:0}
+  .nota{font-size:var(--i-xs);color:var(--ui-sub);line-height:1.45;margin:0}
   .ref{background:var(--ui-bg);border:1px solid var(--ui-linha);border-radius:3px;
-       padding:9px 11px;font-size:11.5px;color:var(--ui-sub);line-height:1.5}
+       padding:9px 11px;font-size:var(--i-xs);color:var(--ui-sub);line-height:1.5}
   .ref b{color:var(--ui-txt);font-weight:600}
 
   .acoes{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:0;
          background:var(--ui-card);padding-top:12px;margin-top:auto}
-  button{font:inherit;font-size:13px;padding:9px 15px;border-radius:3px;cursor:pointer;
+  button{font:inherit;font-size:var(--i-sm);padding:9px 15px;border-radius:3px;cursor:pointer;
          border:1px solid var(--ui-linha);background:var(--ui-campo);color:var(--ui-txt);
          transition:opacity .15s}
   button:hover{opacity:.82}
   button.primario{background:var(--ui-acento);border-color:var(--ui-acento);color:#FBF9F6}
-  .salvo{font-size:11.5px;color:var(--ui-sub);align-self:center}
+  .salvo{font-size:var(--i-xs);color:var(--ui-sub);align-self:center}
 
   /* ---------------- palco ---------------- */
   .palco{padding:30px;display:flex;flex-direction:column;align-items:center;gap:24px;
@@ -103,83 +121,99 @@
   .trilho .bloco{width:100%;height:24mm;background:var(--areia)}
   .trilho .meio{flex:1;display:flex;align-items:center;justify-content:center;gap:7mm;
                 writing-mode:vertical-rl}
-  .trilho .vert{font-family:var(--geo);font-weight:300;font-size:13pt;letter-spacing:.34em;
-                text-transform:uppercase;color:#9C8055}
+  .trilho .vert{font-family:var(--geo);font-weight:300;font-size:var(--t-sm);letter-spacing:.34em;
+                text-transform:uppercase;color:var(--bronze)}
   .trilho .vert.forte{color:var(--bronze)}
 
-  h2.titulo{font-family:var(--geo);font-weight:300;font-size:24pt;letter-spacing:.13em;
+  h2.titulo{font-family:var(--geo);font-weight:300;font-size:var(--t-xl);letter-spacing:.13em;
             text-transform:uppercase;color:var(--display);margin:0 0 6mm;
             text-wrap:balance}
-  h3.sub{font-family:var(--geo);font-weight:400;font-size:10.5pt;letter-spacing:.18em;
+  h3.sub{font-family:var(--geo);font-weight:400;font-size:var(--t-sm);letter-spacing:.18em;
          text-transform:uppercase;color:var(--bronze);margin:0 0 3mm}
-  .pag p{margin:0 0 3mm;font-size:10pt;line-height:1.62;color:var(--tinta);max-width:64ch}
+  .pag p{margin:0 0 3mm;font-size:var(--t-md);line-height:1.62;color:var(--tinta);max-width:64ch}
 
   /* capa */
   .capa .corpo{justify-content:space-between}
-  .capa .grande{font-family:var(--geo);font-weight:200;font-size:46pt;letter-spacing:.12em;
+  .capa .grande{font-family:var(--geo);font-weight:200;font-size:var(--t-2xl);letter-spacing:.12em;
                 text-transform:uppercase;color:var(--display);margin:0;line-height:1}
-  .capa .tipo{font-family:var(--geo);font-weight:300;font-size:9.5pt;letter-spacing:.26em;
-              text-transform:uppercase;color:#6F5632;margin:3mm 0 0}
-  .capa .quem{font-family:var(--caligrafia);font-size:30pt;color:var(--tinta);margin:7mm 0 0;
+  .capa .tipo{font-family:var(--geo);font-weight:300;font-size:var(--t-sm);letter-spacing:.26em;
+              text-transform:uppercase;color:var(--bronze);margin:3mm 0 0}
+  .capa .quem{font-family:var(--caligrafia);font-size:var(--t-script);color:var(--tinta);margin:7mm 0 0;
               line-height:1.25}
-  .capa .local{font-size:10pt;color:#4A4540;margin:3mm 0 0;letter-spacing:.03em}
+  .capa .local{font-size:var(--t-md);color:#4A4540;margin:3mm 0 0;letter-spacing:.03em}
   .assinatura{display:flex;align-items:center;gap:9px}
-  .assinatura .nome{font-family:var(--geo);font-weight:300;font-size:16pt;letter-spacing:.22em;
+  .assinatura .nome{font-family:var(--geo);font-weight:300;font-size:var(--t-lg);letter-spacing:.22em;
                     text-transform:uppercase;color:var(--bronze)}
-  .assinatura .data{font-size:9pt;color:#5E5A56;margin-left:auto}
+  .assinatura .data{font-size:var(--t-sm);color:#5E5A56;margin-left:auto}
 
   /* etapas — reproduz o slide ETAPAS do material original */
   .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;flex:1;min-height:0}
   .etapa{display:flex;flex-direction:column;min-height:0}
   .etapa .ilus{height:48mm;background-size:cover;background-position:center;flex:none;
                background-color:#E8E4DF}
-  .etapa .tira{height:4mm;background:var(--taupe);flex:none}
-  .etapa .num{font-family:"Cormorant Garamond",Georgia,serif;font-size:20pt;color:#9C8055;
+  .etapa .tira{height:2mm;background:var(--taupe);flex:none}
+  .etapa .num{font-family:"Cormorant Garamond",Georgia,serif;font-size:var(--t-xl);color:var(--bronze);
               line-height:1;margin:2.5mm 0 2mm;font-weight:400}
-  .etapa .caixa{background:#8A6A45;color:#FFF;padding:4mm 5mm;flex:1;display:flex;
-                 flex-direction:column;min-height:0}
-  .etapa h4{font-family:var(--geo);font-weight:500;font-size:9.5pt;margin:0 0 2.5mm;color:#FFF}
-  .etapa ul{margin:0;padding-left:4mm;font-size:8.5pt;line-height:1.55;color:#FFF}
-  .etapa .prazo{margin-top:auto;padding-top:3mm;font-family:var(--geo);font-size:7pt;
-                letter-spacing:.1em;text-transform:uppercase;color:#F5EADB}
+  /* Fio de 0,5pt no lugar do bloco de cor saturada — é o divisor mais rápido
+     entre "PowerPoint" e "estúdio". O texto volta a ser preto sobre o osso,
+     o que também resolve o contraste (branco sobre #8A6A45 reprovava). */
+  .etapa .caixa{background:none;color:var(--tinta);padding:4mm 0 0;flex:1;display:flex;
+                 flex-direction:column;min-height:0;border-top:.5pt solid var(--bronze)}
+  .etapa h4{font-family:var(--geo);font-weight:500;font-size:var(--t-sm);margin:0 0 2.5mm;
+            color:var(--tinta);letter-spacing:.06em}
+  .etapa ul{margin:0;padding-left:4mm;font-size:var(--t-sm);line-height:1.6;color:#463F38}
+  .etapa .prazo{margin-top:auto;padding-top:3mm;font-family:var(--geo);font-size:var(--t-xs);
+                letter-spacing:.14em;text-transform:uppercase;color:var(--bronze)}
   .comotrab .cab{text-align:center;margin-bottom:5mm}
   .comotrab .cab h2{margin:0}
-  .comotrab .cab .script{font-family:var(--caligrafia);font-size:21pt;color:var(--tinta);
+  .comotrab .cab .script{font-family:var(--caligrafia);font-size:var(--t-xl);color:var(--tinta);
                          line-height:1;margin-top:-3mm}
   .comotrab .cab hr{border:0;border-top:1px solid var(--taupe);width:52%;margin:4mm auto 0}
 
   /* listas */
   .duascol{display:grid;grid-template-columns:1fr 1.35fr;gap:12mm;flex:1;min-height:0}
-  .lista{list-style:none;margin:0;padding:0;font-size:9.5pt;line-height:1.85}
+  .lista{list-style:none;margin:0;padding:0;font-size:var(--t-sm);line-height:1.85}
   .lista li{position:relative;padding-left:6mm}
   .lista li::before{content:"";position:absolute;left:0;top:1.5mm;width:2.6mm;height:1.4mm;
     border-left:1.3px solid var(--bronze);border-bottom:1.3px solid var(--bronze);
     transform:rotate(-45deg)}
-  .entregas{font-size:9pt;line-height:1.55}
-  .entregas dt{font-weight:600;margin-top:3mm;color:var(--tinta)}
+  /* Duas colunas: em largura cheia a linha dava 80 caracteres (o confortável é
+     45-75) e a página ficava desequilibrada com a lista curta ao lado. */
+  .entregas{font-size:var(--t-sm);line-height:1.6;column-count:2;column-gap:10mm;
+            column-rule:.5pt solid var(--linha)}
+  .entregas dt{font-weight:600;margin-top:3mm;color:var(--tinta);
+               break-after:avoid;page-break-after:avoid}
   .entregas dt:first-child{margin-top:0}
-  .entregas dd{margin:.6mm 0 0;color:#463F38}
+  .entregas dd{margin:.6mm 0 0;color:#463F38;break-inside:avoid;page-break-inside:avoid}
 
   /* investimento */
-  .tabela{width:100%;border-collapse:collapse;margin-top:2mm;font-size:10pt}
-  .tabela th{background:var(--taupe);color:#3A312A;font-family:var(--geo);font-weight:400;
-             font-size:9pt;letter-spacing:.1em;text-transform:uppercase;
-             padding:2.6mm 4mm;text-align:left}
+  /* A página de investimento é a que o cliente mais olha — e a que deve ser a
+     mais silenciosa do documento. Tabela apertada com fundo colorido comunica
+     "custo"; número respirando comunica "valor". Sem fundo, sem borda grossa:
+     só fio de 0,5pt e espaço. */
+  .tabela{width:100%;border-collapse:collapse;margin-top:2mm;font-size:var(--t-md)}
+  .tabela th{background:none;color:var(--bronze);font-family:var(--geo);font-weight:400;
+             font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;
+             padding:0 0 2.5mm;text-align:left;border-bottom:.5pt solid var(--linha)}
   .tabela th:last-child,.tabela td:last-child{text-align:right}
-  .tabela td{padding:2.6mm 4mm;border-bottom:1px solid var(--linha);
+  .tabela td{padding:3.4mm 0;border-bottom:.5pt solid var(--linha);
              font-variant-numeric:tabular-nums}
-  .tabela tr.total td{border-bottom:0;border-top:2px solid var(--taupe);font-weight:700;
-                      font-size:12pt;padding-top:3.4mm}
-  .tabela td.desc{color:#5E5A56;font-size:8.5pt;padding-top:0;border-bottom:0}
-  .condicoes{margin-top:auto;padding-top:5mm;border-top:1px solid var(--linha);
-             display:grid;grid-template-columns:1fr 1fr;gap:4mm 10mm;font-size:8.5pt;
+  .tabela tr.total td{border-bottom:0;border-top:.5pt solid var(--bronze);
+                      font-weight:300;font-size:var(--t-xl);padding-top:5mm;
+                      letter-spacing:.01em;line-height:1.1}
+  .tabela tr.total td:first-child{font-family:var(--geo);font-size:var(--t-xs);
+                      letter-spacing:.16em;text-transform:uppercase;
+                      color:var(--bronze);vertical-align:bottom;padding-bottom:1.5mm}
+  .tabela td.desc{color:#5E5A56;font-size:var(--t-sm);padding-top:0;border-bottom:0}
+  .condicoes{margin-top:auto;padding-top:5mm;border-top:.5pt solid var(--linha);
+             display:grid;grid-template-columns:1fr 1fr;gap:4mm 10mm;font-size:var(--t-sm);
              line-height:1.6;color:#463F38}
-  .condicoes b{display:block;font-family:var(--geo);font-size:8pt;letter-spacing:.13em;
+  .condicoes b{display:block;font-family:var(--geo);font-size:var(--t-xs);letter-spacing:.13em;
                text-transform:uppercase;color:var(--bronze);font-weight:400;
                margin-bottom:.8mm}
   .repasse{background:#EAE3DA;border-left:3px solid var(--taupe);padding:4mm 5mm;
-           margin-top:4mm;font-size:9pt;line-height:1.6}
-  .repasse strong{display:block;font-family:var(--geo);font-size:8.5pt;letter-spacing:.13em;
+           margin-top:4mm;font-size:var(--t-sm);line-height:1.6}
+  .repasse strong{display:block;font-family:var(--geo);font-size:var(--t-xs);letter-spacing:.13em;
                   text-transform:uppercase;color:var(--bronze);font-weight:400;
                   margin-bottom:1.5mm}
   .vazio{color:#B3A899;font-style:italic}
@@ -196,8 +230,8 @@
            margin-top:2mm}
   .galeria figure{margin:0;display:flex;flex-direction:column;min-height:0}
   .galeria .img{flex:1;background-size:cover;background-position:center;min-height:0}
-  .galeria figcaption{font-family:var(--geo);font-weight:300;font-size:7.5pt;
-                      letter-spacing:.12em;text-transform:uppercase;color:#6F5632;
+  .galeria figcaption{font-family:var(--geo);font-weight:300;font-size:var(--t-xs);
+                      letter-spacing:.12em;text-transform:uppercase;color:var(--bronze);
                       padding-top:2mm}
 
 
@@ -206,18 +240,19 @@
   .historia .col{position:absolute;left:14mm;top:11mm;bottom:11mm;width:44%;
                  display:flex;flex-direction:column;gap:5mm}
   .historia .faixa{background:var(--faixa);padding:6mm 8mm;text-align:center}
-  .historia .faixa span{font-family:var(--caligrafia);font-size:30pt;color:#FFF;
+  .historia .faixa span{font-family:var(--caligrafia);font-size:var(--t-script);color:#FFF;
                         line-height:1;display:block}
   .historia .legenda{text-align:center;font-family:var(--geo);font-weight:500;
-                     font-size:10pt;color:var(--tinta)}
-  .historia .texto{background:var(--taupe);padding:8mm;flex:1;display:flex;
+                     font-size:var(--t-sm);color:var(--tinta)}
+  .historia .texto{background:none;border-left:.5pt solid var(--bronze);
+                    padding:2mm 0 2mm 7mm;flex:1;display:flex;
                     flex-direction:column;justify-content:center;gap:4mm}
-  .historia .texto p{margin:0;font-size:9.5pt;line-height:1.75;color:#3B342C;
-                      text-align:justify;max-width:none}
+  .historia .texto p{margin:0;font-size:var(--t-md);line-height:1.75;color:#3B342C;
+                      text-align:left;max-width:64ch}
   .historia .retrato{position:absolute;right:0;top:0;bottom:0;width:48%;
                      background-size:cover;background-position:center top}
   .historia .rubrica{position:absolute;right:6%;bottom:7mm;font-family:var(--caligrafia);
-                     font-size:26pt;color:#FFF;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+                     font-size:var(--t-xl);color:#FFF;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 
 
   /* investimento com imagem lateral */
@@ -225,14 +260,14 @@
   .invest .colunas{display:grid;grid-template-columns:1fr 62mm;gap:9mm;flex:1;min-height:0}
   .invest .esq{display:flex;flex-direction:column;min-height:0}
   .invest .ilustra{background-size:cover;background-position:center;align-self:stretch}
-  .tabela td.itemdesc{color:#5E5A56;font-size:8pt;padding-top:0;padding-bottom:3mm;
-                      border-bottom:1px solid var(--linha)}
+  .tabela td.itemdesc{color:#5E5A56;font-size:var(--t-sm);padding-top:0;padding-bottom:3.4mm;
+                      border-bottom:.5pt solid var(--linha)}
 
 
   /* o seu projeto */
   .briefing{max-width:none;width:56%;display:flex;flex-direction:column;gap:3mm}
-  .briefing p{font-size:11pt;line-height:1.75;margin:0;max-width:52ch}
-  .briefing p:first-child{font-size:13pt;line-height:1.6;color:#2A2622}
+  .briefing p{font-size:var(--t-md);line-height:1.75;margin:0;max-width:52ch}
+  .briefing p:first-child{font-size:var(--t-lg);line-height:1.6;color:#2A2622}
   .briefimg{position:absolute;right:0;top:0;bottom:0;width:38%;
             background-size:cover;background-position:center}
 
@@ -246,7 +281,7 @@
     .pag:last-child{break-after:auto;page-break-after:auto}
     body{background:#fff}
   }
-  .rotulo{font-family:var(--geo);font-weight:400;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  .rotulo{font-family:var(--geo);font-weight:400;font-size:var(--i-xs);letter-spacing:.2em;text-transform:uppercase;
           color:var(--ui-sub);align-self:flex-start;margin-left:calc(50% - 169mm)}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
