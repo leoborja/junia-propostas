@@ -2,5 +2,5 @@
 exemplos/*.pdf
 exemplos/*.png
 exemplos/*.jpg
-*.pdf
+# *.pdf — liberado só para img/ processado
 .DS_Store

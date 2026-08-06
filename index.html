@@ -1,15 +1,21 @@
 <meta charset="utf-8">
 <title>Gerador de Propostas — Junia Vaz Arquitetura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&family=Parisienne&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --osso:#F2EFEA; --taupe:#CBBBA9; --taupe-forte:#8A7059; --tinta:#3A3733;
-    --linha:#E0D8CE; --areia:#DCD2C6; --suave:#7C756C;
+    /* paleta extraída do material original da Junia (.pptx) */
+    --osso:#F3F3F3; --taupe:#D9CCBF; --taupe-forte:#A88C68; --tinta:#0E0E0E;
+    --linha:#E3DCD4; --areia:#D9CCBF; --suave:#6E6A66; --display:#DED3CA;
+    --bronze:#BE9769;
     --ui-bg:#EBE7E1; --ui-card:#F7F5F2; --ui-txt:#3A3733; --ui-sub:#7C756C;
     --ui-linha:#DCD4C9; --ui-campo:#FFFFFF; --ui-acento:#8A7059;
-    --geo:"Futura","Century Gothic","Avenir Next","Questrial","Trebuchet MS",sans-serif;
-    --corpo:"Avenir Next","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
-    --caligrafia:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
+    /* Poppins é a fonte real do material dela; Parisienne substitui a Brittany (comercial) */
+    --geo:"Poppins","Futura","Century Gothic","Avenir Next",sans-serif;
+    --corpo:"Poppins","Avenir Next","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --caligrafia:"Parisienne","Snell Roundhand","Apple Chancery","Brush Script MT",cursive;
   }
   @media (prefers-color-scheme:dark){
     :root{ --ui-bg:#1C1A17; --ui-card:#262320; --ui-txt:#E9E3DA; --ui-sub:#A79C8E;
@@ -83,59 +89,59 @@
          overflow-x:auto}
 
   /* ---------------- documento ---------------- */
-  .pag{width:297mm;height:210mm;background:var(--osso);color:var(--tinta);
+  /* 16:9, o mesmo formato do material original (50,8 x 28,57 cm) */
+  .pag{width:338mm;height:190mm;background:var(--osso);color:var(--tinta);
        position:relative;overflow:hidden;flex:none;
-       box-shadow:0 1px 3px rgba(58,55,51,.13),0 10px 34px rgba(58,55,51,.10)}
-  .pag .corpo{position:absolute;inset:0 78mm 0 0;padding:19mm 15mm 15mm 21mm;
+       box-shadow:0 1px 3px rgba(14,14,14,.10),0 10px 34px rgba(14,14,14,.08)}
+  .pag .corpo{position:absolute;inset:0 44mm 0 0;padding:17mm 14mm 14mm 20mm;
               display:flex;flex-direction:column}
-  .pag.capa .corpo{inset:0 78mm 0 0}
 
   /* trilho lateral com a marca, igual ao material dela */
-  .trilho{position:absolute;top:0;right:0;bottom:0;width:78mm;border-left:1px solid var(--linha);
+  .trilho{position:absolute;top:0;right:0;bottom:0;width:44mm;
           display:flex;flex-direction:column;justify-content:space-between;align-items:center}
-  .trilho .bloco{width:100%;height:26mm;background:var(--areia)}
+  .trilho .bloco{width:100%;height:24mm;background:var(--areia)}
   .trilho .meio{flex:1;display:flex;align-items:center;justify-content:center;gap:7mm;
                 writing-mode:vertical-rl}
-  .trilho .vert{font-family:var(--geo);font-size:15pt;letter-spacing:.34em;
-                text-transform:uppercase;color:#B6A794}
-  .trilho .vert.forte{color:var(--taupe-forte)}
+  .trilho .vert{font-family:var(--geo);font-weight:300;font-size:13pt;letter-spacing:.34em;
+                text-transform:uppercase;color:var(--display)}
+  .trilho .vert.forte{color:var(--bronze)}
 
-  h2.titulo{font-family:var(--geo);font-weight:400;font-size:20pt;letter-spacing:.15em;
-            text-transform:uppercase;color:var(--taupe-forte);margin:0 0 7mm;
+  h2.titulo{font-family:var(--geo);font-weight:300;font-size:24pt;letter-spacing:.13em;
+            text-transform:uppercase;color:var(--display);margin:0 0 6mm;
             text-wrap:balance}
   h3.sub{font-family:var(--geo);font-weight:400;font-size:10.5pt;letter-spacing:.18em;
-         text-transform:uppercase;color:var(--taupe-forte);margin:0 0 3mm}
+         text-transform:uppercase;color:var(--bronze);margin:0 0 3mm}
   .pag p{margin:0 0 3mm;font-size:10pt;line-height:1.62;color:var(--tinta);max-width:64ch}
 
   /* capa */
   .capa .corpo{justify-content:space-between}
-  .capa .grande{font-family:var(--geo);font-weight:300;font-size:44pt;letter-spacing:.13em;
-                text-transform:uppercase;color:#C0B0A0;margin:0;line-height:1}
-  .capa .tipo{font-family:var(--geo);font-size:10pt;letter-spacing:.24em;text-transform:uppercase;
-              color:var(--taupe-forte);margin:4mm 0 0}
-  .capa .quem{font-family:var(--caligrafia);font-size:25pt;color:var(--tinta);margin:7mm 0 0;
+  .capa .grande{font-family:var(--geo);font-weight:200;font-size:46pt;letter-spacing:.12em;
+                text-transform:uppercase;color:var(--display);margin:0;line-height:1}
+  .capa .tipo{font-family:var(--geo);font-weight:300;font-size:9.5pt;letter-spacing:.26em;
+              text-transform:uppercase;color:var(--bronze);margin:3mm 0 0}
+  .capa .quem{font-family:var(--caligrafia);font-size:30pt;color:var(--tinta);margin:7mm 0 0;
               line-height:1.25}
   .capa .local{font-size:10pt;color:var(--suave);margin:3mm 0 0;letter-spacing:.03em}
   .assinatura{display:flex;align-items:center;gap:9px}
-  .assinatura .nome{font-family:var(--geo);font-size:17pt;letter-spacing:.2em;
-                    text-transform:uppercase;color:#A2917F}
+  .assinatura .nome{font-family:var(--geo);font-weight:300;font-size:16pt;letter-spacing:.22em;
+                    text-transform:uppercase;color:var(--bronze)}
   .assinatura .data{font-size:9pt;color:var(--suave);margin-left:auto}
 
   /* etapas */
   .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:9mm;margin-top:2mm}
-  .etapa{border-top:2px solid var(--taupe);padding-top:4mm}
+  .etapa{border-top:2px solid var(--bronze);padding-top:4mm}
   .etapa h4{font-family:var(--geo);font-weight:400;font-size:10pt;letter-spacing:.13em;
             text-transform:uppercase;margin:0 0 3mm;color:var(--tinta)}
   .etapa ul{margin:0;padding-left:4mm;font-size:9pt;line-height:1.7;color:var(--tinta)}
-  .etapa .prazo{margin-top:4mm;font-family:var(--geo);font-size:8pt;letter-spacing:.11em;
-                text-transform:uppercase;color:var(--taupe-forte)}
+  .etapa .prazo{margin-top:4mm;font-family:var(--geo);font-size:7.5pt;letter-spacing:.11em;
+                text-transform:uppercase;color:var(--bronze)}
 
   /* listas */
   .duascol{display:grid;grid-template-columns:1fr 1.35fr;gap:12mm;flex:1;min-height:0}
   .lista{list-style:none;margin:0;padding:0;font-size:9.5pt;line-height:1.85}
   .lista li{position:relative;padding-left:6mm}
   .lista li::before{content:"";position:absolute;left:0;top:1.5mm;width:2.6mm;height:1.4mm;
-    border-left:1.3px solid var(--taupe);border-bottom:1.3px solid var(--taupe);
+    border-left:1.3px solid var(--bronze);border-bottom:1.3px solid var(--bronze);
     transform:rotate(-45deg)}
   .entregas{font-size:9pt;line-height:1.55}
   .entregas dt{font-weight:600;margin-top:3mm;color:var(--tinta)}
@@ -144,7 +150,7 @@
 
   /* investimento */
   .tabela{width:100%;border-collapse:collapse;margin-top:2mm;font-size:10pt}
-  .tabela th{background:var(--taupe);color:#4A3E33;font-family:var(--geo);font-weight:400;
+  .tabela th{background:var(--taupe);color:#3A312A;font-family:var(--geo);font-weight:400;
              font-size:9pt;letter-spacing:.1em;text-transform:uppercase;
              padding:2.6mm 4mm;text-align:left}
   .tabela th:last-child,.tabela td:last-child{text-align:right}
@@ -157,17 +163,33 @@
              display:grid;grid-template-columns:1fr 1fr;gap:4mm 10mm;font-size:8.5pt;
              line-height:1.6;color:#59544D}
   .condicoes b{display:block;font-family:var(--geo);font-size:8pt;letter-spacing:.13em;
-               text-transform:uppercase;color:var(--taupe-forte);font-weight:400;
+               text-transform:uppercase;color:var(--bronze);font-weight:400;
                margin-bottom:.8mm}
-  .repasse{background:#E8E2D9;border-left:3px solid var(--taupe);padding:4mm 5mm;
+  .repasse{background:#EAE3DA;border-left:3px solid var(--taupe);padding:4mm 5mm;
            margin-top:4mm;font-size:9pt;line-height:1.6}
   .repasse strong{display:block;font-family:var(--geo);font-size:8.5pt;letter-spacing:.13em;
-                  text-transform:uppercase;color:var(--taupe-forte);font-weight:400;
+                  text-transform:uppercase;color:var(--bronze);font-weight:400;
                   margin-bottom:1.5mm}
   .vazio{color:#B3A899;font-style:italic}
 
+
+  /* capa com imagem, como no material original */
+  .pag.capa.comfoto .corpo{inset:0 44mm 0 0;width:calc(100% - 44mm)}
+  .capa .foto{position:absolute;top:0;bottom:0;right:44mm;width:52%;
+              background-size:cover;background-position:center}
+  .pag.capa.comfoto .corpo{padding-right:56%}
+
+  /* portfolio */
+  .galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;flex:1;min-height:0;
+           margin-top:2mm}
+  .galeria figure{margin:0;display:flex;flex-direction:column;min-height:0}
+  .galeria .img{flex:1;background-size:cover;background-position:center;min-height:0}
+  .galeria figcaption{font-family:var(--geo);font-weight:300;font-size:7.5pt;
+                      letter-spacing:.12em;text-transform:uppercase;color:var(--bronze);
+                      padding-top:2mm}
+
   /* ---------------- impressão ---------------- */
-  @page{size:A4 landscape;margin:0}
+  @page{size:338mm 190mm;margin:0}
   @media print{
     .painel,.rotulo{display:none!important}
     .app{display:block}
@@ -176,8 +198,8 @@
     .pag:last-child{break-after:auto;page-break-after:auto}
     body{background:#fff}
   }
-  .rotulo{font-family:var(--geo);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-          color:var(--ui-sub);align-self:flex-start;margin-left:calc(50% - 148mm)}
+  .rotulo{font-family:var(--geo);font-weight:400;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+          color:var(--ui-sub);align-self:flex-start;margin-left:calc(50% - 169mm)}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -186,8 +208,8 @@
   <form class="painel" id="painel" autocomplete="off">
     <div class="marca">
       <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
-        <path d="M2 3 L13 3 L7.5 13 Z" fill="#A2917F"/>
-        <path d="M13 3 L24 3 L13 23 Z" fill="#CBBBA9"/>
+        <path d="M2 3 L13 3 L7.5 13 Z" fill="#BE9769"/>
+        <path d="M13 3 L24 3 L13 23 Z" fill="#D9CCBF"/>
       </svg>
       <div>
         <h1>Junia Vaz</h1>
@@ -239,6 +261,18 @@
     <fieldset>
       <legend>O que será entregue</legend>
       <div class="chks" id="entregas"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Imagens</legend>
+      <div>
+        <label for="capaFoto">Foto da capa</label>
+        <select id="capaFoto"></select>
+      </div>
+      <div>
+        <label>Portfólio — marque até 6 (desmarque tudo para não incluir a página)</label>
+        <div class="chks" id="portfolio"></div>
+      </div>
     </fieldset>
 
     <fieldset>
@@ -326,7 +360,7 @@
 
   <!-- ============ PALCO ============ -->
   <div class="palco">
-    <span class="rotulo">Pré-visualização — 4 páginas A4 paisagem</span>
+    <span class="rotulo">Pré-visualização — 16:9, pronta para PDF</span>
     <div id="doc"></div>
   </div>
 </div>
@@ -425,6 +459,18 @@
     obra:"Honorário é a taxa sobre o orçamento da obra. Defina a taxa antes de enviar — é o que separa honorário de repasse."
   };
 
+
+  var FOTOS = [
+    ["fachada-jardim.jpg","Residência unifamiliar"],
+    ["fachada-noite.jpg","Fachada — implantação"],
+    ["fachada-lateral.jpg","Volumetria e revestimentos"],
+    ["terraco-banheira.jpg","Terraço e spa"],
+    ["estar.jpg","Living integrado"],
+    ["suite.jpg","Suíte master"],
+    ["ambiente.jpg","Ambiente integrado"],
+    ["interior-vertical.jpg","Detalhe de interiores"]
+  ];
+
   var $ = function(id){ return document.getElementById(id); };
   var doc = $("doc"), salvo = $("salvo"), timer = null;
 
@@ -485,6 +531,15 @@
     $("camposPreco").innerHTML = h;
   }
 
+  function montaFotos(){
+    $("capaFoto").innerHTML = '<option value="">Sem foto (capa limpa)</option>' +
+      FOTOS.map(function(f){ return '<option value="'+f[0]+'">'+esc(f[1])+'</option>'; }).join("");
+    $("portfolio").innerHTML = FOTOS.map(function(f,i){
+      return '<label class="chk"><input type="checkbox" data-pf="'+f[0]+'"'+
+             (i<3?" checked":"")+'><span>'+esc(f[1])+'</span></label>';
+    }).join("");
+  }
+
   /* ---------- lê o estado ---------- */
   function ler(){
     var d = {};
@@ -507,6 +562,10 @@
     d.visitas = $("visitas").value;
     d.naoInclui = $("naoInclui").value.trim();
     d.data = $("dataProp").value.trim() || hoje();
+    d.capaFoto = $("capaFoto").value;
+    d.portfolio = FOTOS.filter(function(f){
+      var c = document.querySelector('[data-pf="'+f[0]+'"]');
+      return c && c.checked; }).slice(0,6);
     d.pagamento = $("pagamento").value;
     d.pagLivre = $("pagLivre").value.trim();
 
@@ -565,7 +624,9 @@
     var paginas = [];
 
     /* capa */
-    paginas.push('<section class="pag capa"><div class="corpo">'+
+    paginas.push('<section class="pag capa'+(d.capaFoto?" comfoto":"")+'">'+
+      (d.capaFoto?'<div class="foto" style="background-image:url(img/'+d.capaFoto+')"></div>':'')+
+      '<div class="corpo">'+
       '<div><p class="grande">Proposta</p>'+
       '<p class="tipo">'+esc(T.capa)+'</p>'+
       '<p class="quem">'+(d.cliente?esc(d.cliente):'<span class="vazio">nome do cliente</span>')+'</p>'+
@@ -573,8 +634,8 @@
       '</div>'+
       '<div class="assinatura">'+
       '<svg width="30" height="30" viewBox="0 0 26 26" aria-hidden="true">'+
-      '<path d="M2 3 L13 3 L7.5 13 Z" fill="#A2917F"/>'+
-      '<path d="M13 3 L24 3 L13 23 Z" fill="#CBBBA9"/></svg>'+
+      '<path d="M2 3 L13 3 L7.5 13 Z" fill="#BE9769"/>'+
+      '<path d="M13 3 L24 3 L13 23 Z" fill="#D9CCBF"/></svg>'+
       '<span class="nome">Junia Vaz</span>'+
       '<span class="data">'+esc(d.data)+'</span></div>'+
       '</div>'+trilho()+'</section>');
@@ -591,6 +652,18 @@
           '</div></div>';
       }).join("") +'</div>'+
       '</div>'+trilho()+'</section>');
+
+
+    /* portfolio */
+    if(d.portfolio.length){
+      paginas.push('<section class="pag"><div class="corpo">'+
+        '<h2 class="titulo">Projetos realizados</h2>'+
+        '<div class="galeria">'+ d.portfolio.map(function(f){
+          return '<figure><div class="img" style="background-image:url(img/'+f[0]+')"></div>'+
+                 '<figcaption>'+esc(f[1])+'</figcaption></figure>';
+        }).join("") +'</div>'+
+        '</div>'+trilho()+'</section>');
+    }
 
     /* programa + entregas */
     paginas.push('<section class="pag"><div class="corpo">'+
@@ -714,7 +787,7 @@
   }
 
   /* ---------- início ---------- */
-  montaAmbientes(); montaEntregas(); montaAdicionais(); montaCamposPreco();
+  montaAmbientes(); montaEntregas(); montaAdicionais(); montaCamposPreco(); montaFotos();
   restaurar();
   montaEntregas(); montaCamposPreco(); restaurar();
   if(!$("dataProp").value) $("dataProp").value = hoje();
