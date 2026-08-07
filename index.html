@@ -147,9 +147,15 @@
   .assinatura .data{font-size:var(--t-sm);color:#5E5A56;margin-left:auto}
 
   /* etapas — reproduz o slide ETAPAS do material original */
-  .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;flex:1;min-height:0}
+  /* align-items:start faz as colunas terem a altura do próprio conteúdo.
+     Antes esticavam até o rodapé e o prazo, com margin-top:auto, ficava
+     isolado 19% abaixo da lista que ele descreve. */
+  .etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;flex:1;min-height:0;
+          align-items:start}
   .etapa{display:flex;flex-direction:column;min-height:0}
-  .etapa .ilus{height:48mm;background-size:cover;background-position:center;flex:none;
+  /* 48mm deixava 25% da página vazia no rodapé depois que as colunas pararam
+     de esticar. A altura maior usa o espaço e dá presença às ilustrações. */
+  .etapa .ilus{height:66mm;background-size:cover;background-position:center;flex:none;
                background-color:#E8E4DF}
   .etapa .tira{height:2mm;background:var(--taupe);flex:none}
   .etapa .num{font-family:"Cormorant Garamond",Georgia,serif;font-size:var(--t-xl);color:var(--bronze);
@@ -157,12 +163,12 @@
   /* Fio de 0,5pt no lugar do bloco de cor saturada — é o divisor mais rápido
      entre "PowerPoint" e "estúdio". O texto volta a ser preto sobre o osso,
      o que também resolve o contraste (branco sobre #8A6A45 reprovava). */
-  .etapa .caixa{background:none;color:var(--tinta);padding:4mm 0 0;flex:1;display:flex;
-                 flex-direction:column;min-height:0;border-top:.5pt solid var(--bronze)}
+  .etapa .caixa{background:none;color:var(--tinta);padding:4mm 0 0;display:flex;
+                 flex-direction:column;border-top:.5pt solid var(--bronze)}
   .etapa h4{font-family:var(--geo);font-weight:500;font-size:var(--t-sm);margin:0 0 2.5mm;
             color:var(--tinta);letter-spacing:.06em}
   .etapa ul{margin:0;padding-left:4mm;font-size:var(--t-sm);line-height:1.6;color:#463F38}
-  .etapa .prazo{margin-top:auto;padding-top:3mm;font-family:var(--geo);font-size:var(--t-xs);
+  .etapa .prazo{margin-top:3.5mm;padding-top:0;font-family:var(--geo);font-size:var(--t-xs);
                 letter-spacing:.14em;text-transform:uppercase;color:var(--bronze)}
   .comotrab .cab{text-align:center;margin-bottom:5mm}
   .comotrab .cab h2{margin:0}
@@ -171,8 +177,14 @@
   .comotrab .cab hr{border:0;border-top:1px solid var(--taupe);width:52%;margin:4mm auto 0}
 
   /* listas */
-  .duascol{display:grid;grid-template-columns:1fr 1.35fr;gap:12mm;flex:1;min-height:0}
-  .lista{list-style:none;margin:0;padding:0;font-size:var(--t-sm);line-height:1.85}
+  /* 1fr:1.35fr dava largura demais para uma lista de 9 linhas curtas — a coluna
+     Programa acabava na metade da página. */
+  .duascol{display:grid;grid-template-columns:1fr 1.9fr;gap:12mm;flex:1;min-height:0;
+           align-items:start}
+  /* Respiro maior: a lista de ambientes é curta e terminava na metade da página
+     enquanto a coluna de entregáveis descia o dobro. O ar aqui é o que equilibra
+     as duas colunas — não é desperdício, é alinhamento. */
+  .lista{list-style:none;margin:0;padding:0;font-size:var(--t-sm);line-height:2.7}
   .lista li{position:relative;padding-left:6mm}
   .lista li::before{content:"";position:absolute;left:0;top:1.5mm;width:2.6mm;height:1.4mm;
     border-left:1.3px solid var(--bronze);border-bottom:1.3px solid var(--bronze);
@@ -205,7 +217,10 @@
                       letter-spacing:.16em;text-transform:uppercase;
                       color:var(--bronze);vertical-align:bottom;padding-bottom:1.5mm}
   .tabela td.desc{color:#5E5A56;font-size:var(--t-sm);padding-top:0;border-bottom:0}
-  .condicoes{margin-top:auto;padding-top:5mm;border-top:.5pt solid var(--linha);
+  /* Sem margin-top:auto. Ele grudava as condições no rodapé e jogava todo o
+     espaço que sobrava para o meio — 22,7% da altura de buraco entre o valor
+     total e o texto. Agora sobem e o respiro fica embaixo, onde não incomoda. */
+  .condicoes{margin-top:9mm;padding-top:5mm;border-top:.5pt solid var(--linha);
              display:grid;grid-template-columns:1fr 1fr;gap:4mm 10mm;font-size:var(--t-sm);
              line-height:1.6;color:#463F38}
   .condicoes b{display:block;font-family:var(--geo);font-size:var(--t-xs);letter-spacing:.13em;
@@ -237,16 +252,21 @@
 
   /* Minha História — reproduz a página original */
   .historia .corpo{padding:0;inset:0 44mm 0 0;display:block;position:absolute}
+  /* O bloco inteiro (título, legenda, texto) centrado como uma unidade — antes
+     o título ficava colado no topo e o texto flutuava no meio, com dois vazios. */
   .historia .col{position:absolute;left:14mm;top:11mm;bottom:11mm;width:44%;
-                 display:flex;flex-direction:column;gap:5mm}
-  .historia .faixa{background:var(--faixa);padding:6mm 8mm;text-align:center}
-  .historia .faixa span{font-family:var(--caligrafia);font-size:var(--t-script);color:#FFF;
-                        line-height:1;display:block}
-  .historia .legenda{text-align:center;font-family:var(--geo);font-weight:500;
-                     font-size:var(--t-sm);color:var(--tinta)}
-  .historia .texto{background:none;border-left:.5pt solid var(--bronze);
-                    padding:2mm 0 2mm 7mm;flex:1;display:flex;
-                    flex-direction:column;justify-content:center;gap:4mm}
+                 display:flex;flex-direction:column;gap:5mm;justify-content:center}
+  /* Último bloco de cor saturada que restava. Virou fio, como as etapas —
+     e o alinhamento passou a acompanhar o texto, que é à esquerda. */
+  .historia .faixa{background:none;padding:0 0 3mm;text-align:left;
+                   border-bottom:.5pt solid var(--bronze)}
+  .historia .faixa span{font-family:var(--caligrafia);font-size:var(--t-script);
+                        color:var(--tinta);line-height:1;display:block}
+  .historia .legenda{text-align:left;font-family:var(--geo);font-weight:400;
+                     font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;
+                     color:var(--bronze)}
+  .historia .texto{background:none;padding:2mm 0 0;display:flex;
+                    flex-direction:column;gap:4mm}
   .historia .texto p{margin:0;font-size:var(--t-md);line-height:1.75;color:#3B342C;
                       text-align:left;max-width:64ch}
   .historia .retrato{position:absolute;right:0;top:0;bottom:0;width:48%;
@@ -265,7 +285,10 @@
 
 
   /* o seu projeto */
-  .briefing{max-width:none;width:56%;display:flex;flex-direction:column;gap:3mm}
+  /* O texto é curto e ficava colado no topo, com 52% da coluna vazia embaixo
+     enquanto a foto ao lado ia até o fim. Centrado, os dois se equilibram. */
+  .briefing{max-width:none;width:56%;display:flex;flex-direction:column;gap:3mm;
+            flex:1;justify-content:center;padding-bottom:6mm}
   .briefing p{font-size:var(--t-md);line-height:1.75;margin:0;max-width:52ch}
   .briefing p:first-child{font-size:var(--t-lg);line-height:1.6;color:#2A2622}
   .briefimg{position:absolute;right:0;top:0;bottom:0;width:38%;
